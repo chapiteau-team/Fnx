@@ -3,6 +3,10 @@ using Fnx.Core.Types;
 
 namespace Fnx.Core.TypeClasses
 {
+    /// <summary>
+    /// Functor
+    /// </summary>
+    /// <typeparam name="TF"></typeparam>
     public interface IFunctor<TF> : IInvariant<TF>
     {
         /// <summary>

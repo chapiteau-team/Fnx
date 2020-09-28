@@ -22,6 +22,15 @@ namespace Fnx.Core.TypeClasses.Instances
             default(ResultEq<TOk, TError, TEqOk, TEqError>).Eqv(x.Fix(), y.Fix());
     }
 
+    public struct ResultEqK2 : IEqK2<ResultF>
+    {
+        public bool EqK<TOk, TError, TEqOk, TEqError>(IKind2<ResultF, TOk, TError> x, IKind2<ResultF, TOk, TError> y)
+            where TEqOk : struct, IEq<TOk>
+            where TEqError : struct, IEq<TError> =>
+            default(ResultEq<TOk, TError, TEqOk, TEqError>).Eqv(x.Fix(), y.Fix());
+    }
+
+
     public struct ResultFunctor<TError> : IFunctor<ResultOkF<TError>>
     {
         public IKind<ResultOkF<TError>, TB> Map<TA, TB>(IKind<ResultOkF<TError>, TA> fa, Func<TA, TB> f) =>
