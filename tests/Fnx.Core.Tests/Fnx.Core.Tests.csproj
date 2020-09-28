@@ -18,6 +18,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\src\Fnx.Core\Fnx.Core.csproj" />
+      <ProjectReference Include="..\..\src\Fnx.Laws\Fnx.Laws.csproj" />
     </ItemGroup>
 
 </Project>
