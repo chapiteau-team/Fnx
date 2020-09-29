@@ -5,11 +5,11 @@ using static Fnx.Core.Prelude;
 
 namespace Fnx.Core.Tests.TypeClasses.Laws
 {
-    public class InvariantLawTests<TInvariant, TF, TEqK> : LawTests<TF, string>
+    public class InvariantLawsTests<TInvariant, TF, TEqK> : LawTests<IKind<TF, string>>
         where TInvariant : struct, IInvariant<TF>
         where TEqK : struct, IEqK<TF>
     {
-        public InvariantLawTests()
+        public InvariantLawsTests()
         {
             var invariantIdentity = Def((IKind<TF, string> fa) =>
                 InvariantLaws<TInvariant, TF>.InvariantIdentity(fa).Holds<TF, string, TEqK>());

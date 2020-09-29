@@ -3,13 +3,13 @@ using Fnx.Core.Types;
 
 namespace Fnx.Core.Tests.TypeClasses.Laws
 {
-    public class Law<TF, TA>
+    public class Law<T>
     {
-        public string Name { get; }
+        private string Name { get; }
 
-        public Func<IKind<TF, TA>, bool> Test { get; }
+        public Func<T, bool> Test { get; }
 
-        public Law(string name, Func<IKind<TF, TA>, bool> test)
+        public Law(string name, Func<T, bool> test)
         {
             Name = name;
             Test = test;

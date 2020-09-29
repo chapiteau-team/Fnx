@@ -19,9 +19,17 @@ namespace Fnx.Core.TypeClasses.Instances
             default(OptionEq<T, TEq>).Eqv(x.Fix(), y.Fix());
     }
 
+    public struct OptionInvariant : IInvariant<OptionF>
+    {
+        public IKind<OptionF, TB> XMap<TA, TB>(IKind<OptionF, TA> fa, Func<TA, TB> f, Func<TB, TA> g)
+        {
+            return fa.Fix().Map(f);
+        }
+    }
+
     public struct OptionFunctor : IFunctor<OptionF>
     {
-        public IKind<OptionF, TB> Map<TA, TB>(IKind<OptionF, TA> fa, Func<TA, TB> map) =>
-            fa.Fix().Map(map);
+        public IKind<OptionF, TB> Map<TA, TB>(IKind<OptionF, TA> fa, Func<TA, TB> f) =>
+            fa.Fix().Map(f);
     }
 }

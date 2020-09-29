@@ -35,6 +35,23 @@ namespace Fnx.Core.TypeClasses.Instances
             default(ListEq<T, TEq>).Eqv(x.Fix(), y.Fix());
     }
 
+    public struct ListInvariant : IInvariant<ListF>
+    {
+        public IKind<ListF, TB> XMap<TA, TB>(IKind<ListF, TA> fa, Func<TA, TB> f, Func<TB, TA> g)
+        {
+            var list = fa.Fix();
+            var count = list.Count;
+            var result = new List<TB>(count);
+
+            for (var i = 0; i < count; i++)
+            {
+                result.Add(f(list[i]));
+            }
+
+            return result.ToKind();
+        }
+    }
+
     public struct ListFunctor : IFunctor<ListF>
     {
         public IKind<ListF, TB> Map<TA, TB>(IKind<ListF, TA> fa, Func<TA, TB> f)

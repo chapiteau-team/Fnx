@@ -5,11 +5,11 @@ using static Fnx.Core.Prelude;
 
 namespace Fnx.Core.Tests.TypeClasses.Laws
 {
-    public class FunctorLawTests<TFunctor, TF, TEqK> : InvariantLawTests<TFunctor, TF, TEqK>
+    public class FunctorLawsTests<TFunctor, TF, TEqK> : InvariantLawsTests<TFunctor, TF, TEqK>
         where TFunctor : struct, IFunctor<TF>
         where TEqK : struct, IEqK<TF>
     {
-        public FunctorLawTests()
+        public FunctorLawsTests()
         {
             var covariantIdentity = Def((IKind<TF, string> fa) =>
                 FunctorLaws<TFunctor, TF>.CovariantIdentity<string>(fa).Holds<TF, string, TEqK>());

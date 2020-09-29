@@ -30,6 +30,12 @@ namespace Fnx.Core.TypeClasses.Instances
             default(ResultEq<TOk, TError, TEqOk, TEqError>).Eqv(x.Fix(), y.Fix());
     }
 
+    public struct ResultInvariant<TError> : IInvariant<ResultOkF<TError>>
+    {
+        public IKind<ResultOkF<TError>, TB> XMap<TA, TB>(
+            IKind<ResultOkF<TError>, TA> fa, Func<TA, TB> f, Func<TB, TA> g) =>
+            fa.Fix().Map(f);
+    }
 
     public struct ResultFunctor<TError> : IFunctor<ResultOkF<TError>>
     {
