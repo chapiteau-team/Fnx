@@ -37,5 +37,15 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
 
             law.Test(Some("1")).ShouldBe(true);
         }
+
+        [Theory]
+        [ClassData(typeof(ApplyLawsTests<OptionApply, OptionF, OptionEqK>))]
+        public void ApplyLaw(Law<IKind<OptionF, string>> law)
+        {
+            Option<string> none = None;
+            law.Test(none).ShouldBe(true);
+
+            law.Test(Some("1")).ShouldBe(true);
+        }
     }
 }

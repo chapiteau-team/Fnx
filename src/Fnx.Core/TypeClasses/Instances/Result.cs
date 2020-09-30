@@ -42,4 +42,14 @@ namespace Fnx.Core.TypeClasses.Instances
         public IKind<ResultOkF<TError>, TB> Map<TA, TB>(IKind<ResultOkF<TError>, TA> fa, Func<TA, TB> f) =>
             fa.Fix().Map(f);
     }
+
+    public struct ResultApply<TError> : IApply<ResultOkF<TError>>
+    {
+        public IKind<ResultOkF<TError>, TB> Map<TA, TB>(IKind<ResultOkF<TError>, TA> fa, Func<TA, TB> f) =>
+            fa.Fix().Map(f);
+
+        public IKind<ResultOkF<TError>, TB> Ap<TA, TB>(
+            IKind<ResultOkF<TError>, Func<TA, TB>> ff, IKind<ResultOkF<TError>, TA> fa) =>
+            ff.Fix().FlatMap(fa.Fix().Map);
+    }
 }

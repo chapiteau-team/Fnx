@@ -7,7 +7,7 @@ namespace Fnx.Core.Fn
         // @formatter:off
         public static Func<TResult> Compose<T1, TResult>(this Func<T1, TResult> f, Func<T1> g) => () => f(g());
         /// <summary>
-        /// (g ∘ f )(x) = g(f(x))
+        /// (g ∘ f )(x) = g(f(x))
         /// </summary>
         public static Func<T1, TResult> Compose<T1, T2, TResult>(this Func<T2, TResult> f, Func<T1, T2> g) => arg1 => f(g(arg1));
         public static Func<T1, T2, TResult> Compose<T1, T2, T3, TResult>(this Func<T3, TResult> f, Func<T1, T2, T3> g) => (arg1, arg2) => f(g(arg1, arg2));

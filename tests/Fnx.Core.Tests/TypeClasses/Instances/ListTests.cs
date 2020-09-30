@@ -38,5 +38,15 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
             var list = new List<string> {"1", "2", "3"};
             law.Test(list.ToKind()).ShouldBe(true);
         }
+
+        [Theory, ClassData(typeof(ApplyLawsTests<ListApply, ListF, ListEqK>))]
+        public void ApplyLaw(Law<IKind<ListF, string>> law)
+        {
+            var empty = Enumerable.Empty<string>().ToList();
+            law.Test(empty.ToKind()).ShouldBe(true);
+
+            var list = new List<string> {"1", "2", "3"};
+            law.Test(list.ToKind()).ShouldBe(true);
+        }
     }
 }
