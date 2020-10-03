@@ -7,12 +7,12 @@ namespace Fnx.Core.Tests.TypeClasses.Laws
     {
         private string Name { get; }
 
-        public Func<T, bool> Test { get; }
+        public Func<T, bool> TestLaw { get; }
 
-        public Law(string name, Func<T, bool> test)
+        public Law(string name, Func<T, bool> testLaw)
         {
             Name = name;
-            Test = test;
+            TestLaw = testLaw;
         }
 
         public override string ToString() => Name;

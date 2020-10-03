@@ -46,4 +46,23 @@ namespace Fnx.Core.TypeClasses.Instances
                 : new None<TB>();
         }
     }
+
+    public struct OptionApplicative : IApplicative<OptionF>
+    {
+        public IKind<OptionF, TB> Map<TA, TB>(IKind<OptionF, TA> fa, Func<TA, TB> f) =>
+            fa.Fix().Map(f);
+
+        public IKind<OptionF, TB> Ap<TA, TB>(IKind<OptionF, Func<TA, TB>> ff, IKind<OptionF, TA> fa)
+        {
+            var f = ff.Fix();
+            var a = fa.Fix();
+
+            return f.IsSome && a.IsSome
+                ? (IKind<OptionF, TB>) new Some<TB>(f.Get()(a.Get()))
+                : new None<TB>();
+        }
+
+        public IKind<OptionF, T> Pure<T>(T value) =>
+            new Some<T>(value);
+    }
 }

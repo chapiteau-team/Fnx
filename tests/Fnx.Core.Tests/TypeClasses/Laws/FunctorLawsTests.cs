@@ -1,94 +1,79 @@
 using Fnx.Core.TypeClasses;
 using Fnx.Core.Types;
 using Fnx.Laws;
-using static Fnx.Core.Prelude;
 
 namespace Fnx.Core.Tests.TypeClasses.Laws
 {
-    public class FunctorLawsTests<TFunctor, TF, TEqK> : InvariantLawsTests<TFunctor, TF, TEqK>
+    public class FunctorLawsTests<TFunctor, TF, TEqK, TA, TB, TC> : InvariantLawsTests<TFunctor, TF, TEqK, TA, TB, TC>
         where TFunctor : struct, IFunctor<TF>
         where TEqK : struct, IEqK<TF>
     {
         public FunctorLawsTests()
         {
-            var covariantIdentity = Def((IKind<TF, string> fa) =>
-                FunctorLaws<TFunctor, TF>.CovariantIdentity<string>(fa).Holds<TF, string, TEqK>());
+            Add("Covariant Identity", args =>
+                FunctorLaws<TFunctor, TF>.CovariantIdentity(args.LiftedA).Holds<TF, TA, TEqK>());
 
-            var f = Def<string, int>(int.Parse);
-            var g = Def<int, long>(x => x);
+            Add("CovariantComposition", args =>
+                FunctorLaws<TFunctor, TF>.CovariantComposition(args.LiftedA, args.FuncAtoB, args.FuncBtoC)
+                    .Holds<TF, TC, TEqK>());
 
-            var covariantComposition = Def((IKind<TF, string> fa) =>
-                FunctorLaws<TFunctor, TF>.CovariantComposition(fa, f, g).Holds<TF, long, TEqK>());
+            Add("Lift Identity", args =>
+                FunctorLaws<TFunctor, TF>.LiftIdentity(args.LiftedA).Holds<TF, TA, TEqK>());
 
-            var liftIdentity = Def((IKind<TF, string> fa) =>
-                FunctorLaws<TFunctor, TF>.LiftIdentity(fa).Holds<TF, string, TEqK>());
+            Add("Lift Composition", args =>
+                FunctorLaws<TFunctor, TF>.LiftComposition(args.LiftedA, args.FuncAtoB, args.FuncBtoC)
+                    .Holds<TF, TC, TEqK>());
 
-            var liftComposition = Def((IKind<TF, string> fa) =>
-                FunctorLaws<TFunctor, TF>.LiftComposition(fa, f, g).Holds<TF, long, TEqK>());
+            Add("Void Identity", args =>
+                FunctorLaws<TFunctor, TF>.VoidIdentity(args.LiftedA).Holds<TF, Nothing, TEqK>());
 
-            var voidIdentity = Def((IKind<TF, string> fa) =>
-                FunctorLaws<TFunctor, TF>.VoidIdentity(fa).Holds<TF, Nothing, TEqK>());
+            Add("Void Composition", args =>
+                FunctorLaws<TFunctor, TF>.VoidComposition(args.LiftedA).Holds<TF, Nothing, TEqK>());
 
-            var voidComposition = Def((IKind<TF, string> fa) =>
-                FunctorLaws<TFunctor, TF>.VoidComposition(fa).Holds<TF, Nothing, TEqK>());
+            Add("FProduct Identity", args =>
+                FunctorLaws<TFunctor, TF>.FProductIdentity(args.LiftedA, args.B).Holds<TF, (TA, TB), TEqK>());
 
-            var fProductIdentity = Def((IKind<TF, string> fa) =>
-                FunctorLaws<TFunctor, TF>.FProductIdentity(fa, 1).Holds<TF, (string, int), TEqK>());
+            Add("FProduct Composition", args =>
+                FunctorLaws<TFunctor, TF>
+                    .FProductComposition(args.LiftedA, args.FuncAtoB, ((TA a, TB b) ab) => args.FuncBtoC(ab.b))
+                    .Holds<TF, ((TA, TB), TC), TEqK>());
 
-            var fProductComposition = Def((IKind<TF, string> fa) =>
-                FunctorLaws<TFunctor, TF>.FProductComposition(fa, f, ((string a, int b) ab) => g(ab.b))
-                    .Holds<TF, ((string, int), long), TEqK>());
+            Add("FProductLeft Identity", args =>
+                FunctorLaws<TFunctor, TF>.FProductLeftIdentity(args.LiftedA, args.B).Holds<TF, (TB, TA), TEqK>());
 
-            var fProductLeftIdentity = Def((IKind<TF, string> fa) =>
-                FunctorLaws<TFunctor, TF>.FProductLeftIdentity(fa, 1).Holds<TF, (int, string), TEqK>());
+            Add("FProductLeft Composition", args =>
+                FunctorLaws<TFunctor, TF>
+                    .FProductLeftComposition(args.LiftedA, args.FuncAtoB, ((TB b, TA a) ba) => args.FuncBtoC(ba.b))
+                    .Holds<TF, (TC, (TB, TA)), TEqK>());
 
-            var fProductLeftComposition = Def((IKind<TF, string> fa) =>
-                FunctorLaws<TFunctor, TF>.FProductLeftComposition(fa, f, ((int b, string a) ba) => g(ba.b))
-                    .Holds<TF, (long, (int, string)), TEqK>());
+            Add("As Identity", args =>
+                FunctorLaws<TFunctor, TF>.AsIdentity(args.LiftedA, args.B).Holds<TF, TB, TEqK>());
 
-            var asIdentity = Def((IKind<TF, string> fa) =>
-                FunctorLaws<TFunctor, TF>.AsIdentity(fa, 1).Holds<TF, int, TEqK>());
+            Add("As Composition", args =>
+                FunctorLaws<TFunctor, TF>.AsComposition(args.LiftedA, args.B, args.C).Holds<TF, TC, TEqK>());
 
-            var asComposition = Def((IKind<TF, string> fa) =>
-                FunctorLaws<TFunctor, TF>.AsComposition(fa, 1, 2).Holds<TF, int, TEqK>());
+            Add("TupleLeft Identity", args =>
+                FunctorLaws<TFunctor, TF>.TupleLeftIdentity(args.LiftedA, args.B).Holds<TF, (TB, TA), TEqK>());
 
-            var tupleLeftIdentity = Def((IKind<TF, string> fa) =>
-                FunctorLaws<TFunctor, TF>.TupleLeftIdentity(fa, 1).Holds<TF, (int, string), TEqK>());
+            Add("TupleLeft Composition", args =>
+                FunctorLaws<TFunctor, TF>.TupleLeftComposition(args.LiftedA, args.B, args.C)
+                    .Holds<TF, (TC, (TB, TA)), TEqK>());
 
-            var tupleLeftComposition = Def((IKind<TF, string> fa) =>
-                FunctorLaws<TFunctor, TF>.TupleLeftComposition(fa, 1, 2L).Holds<TF, (long, (int, string)), TEqK>());
+            Add("TupleRight Identity", args =>
+                FunctorLaws<TFunctor, TF>.TupleRightIdentity(args.LiftedA, args.B).Holds<TF, (TA, TB), TEqK>());
 
-            var tupleRightIdentity = Def((IKind<TF, string> fa) =>
-                FunctorLaws<TFunctor, TF>.TupleRightIdentity(fa, 1).Holds<TF, (string, int), TEqK>());
+            Add("TupleRight Composition", args =>
+                FunctorLaws<TFunctor, TF>.TupleRightComposition(args.LiftedA, args.B, args.C)
+                    .Holds<TF, ((TA, TB), TC), TEqK>());
 
-            var tupleRightComposition = Def((IKind<TF, string> fa) =>
-                FunctorLaws<TFunctor, TF>.TupleRightComposition(fa, 1, 2L).Holds<TF, ((string, int), long), TEqK>());
-
-            var unzipIdentity = Def((IKind<TF, string> fa) =>
-                FunctorLaws<TFunctor, TF>.UnzipIdentity(fa, f) switch
+            Add("Unzip Identity", args =>
+                FunctorLaws<TFunctor, TF>.UnzipIdentity(args.LiftedA, args.FuncAtoB) switch
                 {
-                    var (a, b) => a.Holds<TF, string, TEqK>() && b.Holds<TF, int, TEqK>()
+                    var (a, b) => a.Holds<TF, TA, TEqK>() && b.Holds<TF, TB, TEqK>()
                 }
             );
 
-            Add("Covariant Identity", covariantIdentity);
-            Add("CovariantComposition", covariantComposition);
-            Add("Lift Identity", liftIdentity);
-            Add("Lift Composition", liftComposition);
-            Add("Void Identity", voidIdentity);
-            Add("Void Composition", voidComposition);
-            Add("FProduct Identity", fProductIdentity);
-            Add("FProduct Composition", fProductComposition);
-            Add("FProductLeft Identity", fProductLeftIdentity);
-            Add("FProductLeft Composition", fProductLeftComposition);
-            Add("As Identity", asIdentity);
-            Add("As Composition", asComposition);
-            Add("TupleLeft Identity", tupleLeftIdentity);
-            Add("TupleLeft Composition", tupleLeftComposition);
-            Add("TupleRight Identity", tupleRightIdentity);
-            Add("TupleRight Composition", tupleRightComposition);
-            Add("Unzip Identity", unzipIdentity);
-            Add("Widen", FunctorLaws<TFunctor, TF>.Widen<string, object>);
+            Add("Widen", args => FunctorLaws<TFunctor, TF>.Widen<TA, object>(args.LiftedA));
         }
     }
 }

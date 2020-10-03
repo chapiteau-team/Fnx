@@ -1,29 +1,22 @@
 using Fnx.Core.TypeClasses;
-using Fnx.Core.Types;
 using Fnx.Laws;
-using static Fnx.Core.Prelude;
 
 namespace Fnx.Core.Tests.TypeClasses.Laws
 {
-    public class InvariantLawsTests<TInvariant, TF, TEqK> : LawTests<IKind<TF, string>>
+    public class InvariantLawsTests<TInvariant, TF, TEqK, TA, TB, TC> : LawTests<TestArgs<TF, TA, TB, TC>>
         where TInvariant : struct, IInvariant<TF>
         where TEqK : struct, IEqK<TF>
     {
         public InvariantLawsTests()
         {
-            var invariantIdentity = Def((IKind<TF, string> fa) =>
-                InvariantLaws<TInvariant, TF>.InvariantIdentity(fa).Holds<TF, string, TEqK>());
-
-            var f1 = Def<string, int>(int.Parse);
-            var f2 = Def<int, string>(b => b.ToString());
-            var g1 = Def<int, long>(x => x);
-            var g2 = Def<long, int>(x => (int) x);
-
-            var invariantComposition = Def((IKind<TF, string> fa) =>
-                InvariantLaws<TInvariant, TF>.InvariantComposition(fa, f1, f2, g1, g2).Holds<TF, long, TEqK>());
-
-            Add("Invariant Identity", invariantIdentity);
-            Add("Invariant Composition", invariantComposition);
+            Add("Invariant Identity", args =>
+                InvariantLaws<TInvariant, TF>.InvariantIdentity(args.LiftedA)
+                    .Holds<TF, TA, TEqK>());
+            
+            Add("Invariant Composition", args =>
+                InvariantLaws<TInvariant, TF>.InvariantComposition(args.LiftedA, args.FuncAtoB, args.FuncBtoA,
+                        args.FuncBtoC, args.FuncCtoB)
+                    .Holds<TF, TC, TEqK>());
         }
     }
 }

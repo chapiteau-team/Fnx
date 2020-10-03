@@ -625,5 +625,11 @@ namespace Fnx.Core.DataTypes
             (Result<TOk, TError>) self;
 
         public static IKind<ResultOkF<TError>, TOk> ToKind<TOk, TError>(this Result<TOk, TError> self) => self;
+
+        public static IKind<ResultOkF<TError>, TOk> ToKind<TOk, TError>(this Result<Nothing, TError> self) =>
+            (Result<TOk, TError>) self;
+
+        public static IKind<ResultOkF<TError>, TOk> ToKind<TOk, TError>(this Result<TOk, Nothing> self) =>
+            (Result<TOk, TError>) self;
     }
 }

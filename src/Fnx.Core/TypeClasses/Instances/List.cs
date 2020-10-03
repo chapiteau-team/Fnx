@@ -52,7 +52,25 @@ namespace Fnx.Core.TypeClasses.Instances
         public IKind<ListF, TB> Map<TA, TB>(IKind<ListF, TA> fa, Func<TA, TB> f) =>
             fa.Fix().Map(f).ToKind();
 
-        public IKind<ListF, TB> Ap<TA, TB>(IKind<ListF, Func<TA, TB>> ff, IKind<ListF, TA> fa) =>
-            ff.Fix().FlatMap(fa.Fix().Map).ToKind();
+        public IKind<ListF, TB> Ap<TA, TB>(IKind<ListF, Func<TA, TB>> ff, IKind<ListF, TA> fa)
+        {
+            var a = fa.Fix();
+            return ff.Fix().FlatMap(x => a.Map(x)).ToKind();
+        }
+    }
+
+    public struct ListApplicative : IApplicative<ListF>
+    {
+        public IKind<ListF, TB> Map<TA, TB>(IKind<ListF, TA> fa, Func<TA, TB> f) =>
+            fa.Fix().Map(f).ToKind();
+
+        public IKind<ListF, TB> Ap<TA, TB>(IKind<ListF, Func<TA, TB>> ff, IKind<ListF, TA> fa)
+        {
+            var a = fa.Fix();
+            return ff.Fix().FlatMap(x => a.Map(x)).ToKind();
+        }
+
+        public IKind<ListF, T> Pure<T>(T value) =>
+            new List<T> {value}.ToKind();
     }
 }

@@ -4,7 +4,7 @@ using Fnx.Core.Types;
 namespace Fnx.Core.TypeClasses
 {
     /// <summary>
-    /// Functor
+    /// Covariant functor.
     /// </summary>
     /// <typeparam name="TF"></typeparam>
     public interface IFunctor<TF> : IInvariant<TF>

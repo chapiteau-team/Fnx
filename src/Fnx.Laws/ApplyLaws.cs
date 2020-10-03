@@ -1,12 +1,26 @@
 using System;
+using Fnx.Core.Fn;
 using Fnx.Core.TypeClasses;
 using Fnx.Core.Types;
+using static Fnx.Core.Prelude;
 
 namespace Fnx.Laws
 {
     public static class ApplyLaws<TApply, TF>
         where TApply : struct, IApply<TF>
     {
+        public static IsEq<IKind<TF, TC>> ApplyComposition<TA, TB, TC>(
+            IKind<TF, TA> fa, IKind<TF, Func<TA, TB>> fab, IKind<TF, Func<TB, TC>> fbc)
+        {
+            var apply = default(TApply);
+            var compose = Def<Func<TB, TC>, Func<Func<TA, TB>, Func<TA, TC>>>(bc => bc.Compose);
+
+            return IsEq.EqualUnderLaw(
+                apply.Ap(fbc, apply.Ap(fab, fa)),
+                apply.Ap(apply.Ap(apply.Map(fbc, compose), fab), fa)
+            );
+        }
+
         public static IsEq<IKind<TF, TC>> Map2ProductConsistency<TA, TB, TC>(
             IKind<TF, TA> fa, IKind<TF, TB> fb, Func<TA, TB, TC> f)
         {

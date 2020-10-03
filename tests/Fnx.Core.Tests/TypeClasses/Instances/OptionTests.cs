@@ -1,7 +1,7 @@
+using System;
 using Fnx.Core.DataTypes;
 using Fnx.Core.Tests.TypeClasses.Laws;
 using Fnx.Core.TypeClasses.Instances;
-using Fnx.Core.Types;
 using Shouldly;
 using Xunit;
 using static Fnx.Core.Prelude;
@@ -14,38 +14,100 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
         [ClassData(typeof(EqLawsTests<OptionEq<string, DefaultEq<string>>, Option<string>>))]
         public void EqLaw(Law<Option<string>> law)
         {
-            law.Test(None).ShouldBe(true);
-            law.Test(Some("1")).ShouldBe(true);
+            law.TestLaw(None).ShouldBe(true);
+            law.TestLaw(Some("1")).ShouldBe(true);
         }
 
         [Theory]
-        [ClassData(typeof(InvariantLawsTests<OptionInvariant, OptionF, OptionEqK>))]
-        public void InvariantLaw(Law<IKind<OptionF, string>> law)
+        [ClassData(typeof(InvariantLawsTests<OptionInvariant, OptionF, OptionEqK, string, int, long>))]
+        public void NoneInvariantLaw(Law<TestArgs<OptionF, string, int, long>> law)
         {
-            Option<string> none = None;
-            law.Test(none).ShouldBe(true);
+            var args = TestArgs.Default<OptionF>();
+            args.LiftedA = None.ToKind<string>();
 
-            law.Test(Some("1")).ShouldBe(true);
+            law.TestLaw(args).ShouldBe(true);
         }
 
         [Theory]
-        [ClassData(typeof(FunctorLawsTests<OptionFunctor, OptionF, OptionEqK>))]
-        public void FunctorLaw(Law<IKind<OptionF, string>> law)
+        [ClassData(typeof(InvariantLawsTests<OptionInvariant, OptionF, OptionEqK, string, int, long>))]
+        public void SomeInvariantLaw(Law<TestArgs<OptionF, string, int, long>> law)
         {
-            Option<string> none = None;
-            law.Test(none).ShouldBe(true);
+            var args = TestArgs.Default<OptionF>();
+            args.LiftedA = Some(args.A);
 
-            law.Test(Some("1")).ShouldBe(true);
+            law.TestLaw(args).ShouldBe(true);
         }
 
         [Theory]
-        [ClassData(typeof(ApplyLawsTests<OptionApply, OptionF, OptionEqK>))]
-        public void ApplyLaw(Law<IKind<OptionF, string>> law)
+        [ClassData(typeof(FunctorLawsTests<OptionFunctor, OptionF, OptionEqK, string, int, long>))]
+        public void NoneFunctorLaw(Law<TestArgs<OptionF, string, int, long>> law)
         {
-            Option<string> none = None;
-            law.Test(none).ShouldBe(true);
+            var args = TestArgs.Default<OptionF>();
+            args.LiftedA = None.ToKind<string>();
 
-            law.Test(Some("1")).ShouldBe(true);
+            law.TestLaw(args).ShouldBe(true);
+        }
+
+        [Theory]
+        [ClassData(typeof(FunctorLawsTests<OptionFunctor, OptionF, OptionEqK, string, int, long>))]
+        public void SomeFunctorLaw(Law<TestArgs<OptionF, string, int, long>> law)
+        {
+            var args = TestArgs.Default<OptionF>();
+            args.LiftedA = Some(args.A);
+
+            law.TestLaw(args).ShouldBe(true);
+        }
+
+        [Theory]
+        [ClassData(typeof(ApplyLawsTests<OptionApply, OptionF, OptionEqK, string, int, long>))]
+        public void NoneApplyLaw(Law<TestArgs<OptionF, string, int, long>> law)
+        {
+            var args = TestArgs.Default<OptionF>();
+            args.LiftedA = None.ToKind<string>();
+            args.LiftedB = None.ToKind<int>();
+            args.LiftedFuncAtoB = None.ToKind<Func<string, int>>();
+            args.LiftedFuncBtoC = None.ToKind<Func<int, long>>();
+
+            law.TestLaw(args).ShouldBe(true);
+        }
+
+        [Theory]
+        [ClassData(typeof(ApplyLawsTests<OptionApply, OptionF, OptionEqK, string, int, long>))]
+        public void SomeApplyLaw(Law<TestArgs<OptionF, string, int, long>> law)
+        {
+            var args = TestArgs.Default<OptionF>();
+            args.LiftedA = Some(args.A);
+            args.LiftedB = Some(args.B);
+            args.LiftedFuncAtoB = Some(args.FuncAtoB);
+            args.LiftedFuncBtoC = Some(args.FuncBtoC);
+
+            law.TestLaw(args).ShouldBe(true);
+        }
+
+        [Theory]
+        [ClassData(typeof(ApplicativeLawsTests<OptionApplicative, OptionF, OptionEqK, string, int, long>))]
+        public void NoneApplicativeLaw(Law<TestArgs<OptionF, string, int, long>> law)
+        {
+            var args = TestArgs.Default<OptionF>();
+            args.LiftedA = None.ToKind<string>();
+            args.LiftedB = None.ToKind<int>();
+            args.LiftedFuncAtoB = None.ToKind<Func<string, int>>();
+            args.LiftedFuncBtoC = None.ToKind<Func<int, long>>();
+
+            law.TestLaw(args).ShouldBe(true);
+        }
+
+        [Theory]
+        [ClassData(typeof(ApplicativeLawsTests<OptionApplicative, OptionF, OptionEqK, string, int, long>))]
+        public void SomeApplicativeLaw(Law<TestArgs<OptionF, string, int, long>> law)
+        {
+            var args = TestArgs.Default<OptionF>();
+            args.LiftedA = Some(args.A);
+            args.LiftedB = Some(args.B);
+            args.LiftedFuncAtoB = Some(args.FuncAtoB);
+            args.LiftedFuncBtoC = Some(args.FuncBtoC);
+
+            law.TestLaw(args).ShouldBe(true);
         }
     }
 }
