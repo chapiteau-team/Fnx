@@ -23,7 +23,7 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
         public void NoneInvariantLaw(Law<TestArgs<OptionF, string, int, long>> law)
         {
             var args = TestArgs.Default<OptionF>();
-            args.LiftedA = None.ToKind<string>();
+            args.LiftedA = None.K<string>();
 
             law.TestLaw(args).ShouldBe(true);
         }
@@ -43,7 +43,7 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
         public void NoneFunctorLaw(Law<TestArgs<OptionF, string, int, long>> law)
         {
             var args = TestArgs.Default<OptionF>();
-            args.LiftedA = None.ToKind<string>();
+            args.LiftedA = None.K<string>();
 
             law.TestLaw(args).ShouldBe(true);
         }
@@ -63,10 +63,10 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
         public void NoneApplyLaw(Law<TestArgs<OptionF, string, int, long>> law)
         {
             var args = TestArgs.Default<OptionF>();
-            args.LiftedA = None.ToKind<string>();
-            args.LiftedB = None.ToKind<int>();
-            args.LiftedFuncAtoB = None.ToKind<Func<string, int>>();
-            args.LiftedFuncBtoC = None.ToKind<Func<int, long>>();
+            args.LiftedA = None.K<string>();
+            args.LiftedB = None.K<int>();
+            args.LiftedFuncAtoB = None.K<Func<string, int>>();
+            args.LiftedFuncBtoC = None.K<Func<int, long>>();
 
             law.TestLaw(args).ShouldBe(true);
         }
@@ -89,10 +89,10 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
         public void NoneApplicativeLaw(Law<TestArgs<OptionF, string, int, long>> law)
         {
             var args = TestArgs.Default<OptionF>();
-            args.LiftedA = None.ToKind<string>();
-            args.LiftedB = None.ToKind<int>();
-            args.LiftedFuncAtoB = None.ToKind<Func<string, int>>();
-            args.LiftedFuncBtoC = None.ToKind<Func<int, long>>();
+            args.LiftedA = None.K<string>();
+            args.LiftedB = None.K<int>();
+            args.LiftedFuncAtoB = None.K<Func<string, int>>();
+            args.LiftedFuncBtoC = None.K<Func<int, long>>();
 
             law.TestLaw(args).ShouldBe(true);
         }

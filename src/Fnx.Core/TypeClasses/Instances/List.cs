@@ -38,39 +38,39 @@ namespace Fnx.Core.TypeClasses.Instances
     public struct ListInvariant : IInvariant<ListF>
     {
         public IKind<ListF, TB> XMap<TA, TB>(IKind<ListF, TA> fa, Func<TA, TB> f, Func<TB, TA> g) =>
-            fa.Fix().Map(f).ToKind();
+            fa.Fix().Map(f).K();
     }
 
     public struct ListFunctor : IFunctor<ListF>
     {
         public IKind<ListF, TB> Map<TA, TB>(IKind<ListF, TA> fa, Func<TA, TB> f) =>
-            fa.Fix().Map(f).ToKind();
+            fa.Fix().Map(f).K();
     }
 
     public struct ListApply : IApply<ListF>
     {
         public IKind<ListF, TB> Map<TA, TB>(IKind<ListF, TA> fa, Func<TA, TB> f) =>
-            fa.Fix().Map(f).ToKind();
+            fa.Fix().Map(f).K();
 
         public IKind<ListF, TB> Ap<TA, TB>(IKind<ListF, Func<TA, TB>> ff, IKind<ListF, TA> fa)
         {
             var a = fa.Fix();
-            return ff.Fix().FlatMap(x => a.Map(x)).ToKind();
+            return ff.Fix().FlatMap(x => a.Map(x)).K();
         }
     }
 
     public struct ListApplicative : IApplicative<ListF>
     {
         public IKind<ListF, TB> Map<TA, TB>(IKind<ListF, TA> fa, Func<TA, TB> f) =>
-            fa.Fix().Map(f).ToKind();
+            fa.Fix().Map(f).K();
 
         public IKind<ListF, TB> Ap<TA, TB>(IKind<ListF, Func<TA, TB>> ff, IKind<ListF, TA> fa)
         {
             var a = fa.Fix();
-            return ff.Fix().FlatMap(x => a.Map(x)).ToKind();
+            return ff.Fix().FlatMap(x => a.Map(x)).K();
         }
 
         public IKind<ListF, T> Pure<T>(T value) =>
-            new List<T> {value}.ToKind();
+            new List<T> {value}.K();
     }
 }

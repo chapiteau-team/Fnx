@@ -22,7 +22,7 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
         public void EmptyListInvariantLaw(Law<TestArgs<ListF, string, int, long>> law)
         {
             var args = TestArgs.Default<ListF>();
-            args.LiftedA = new List<string>().ToKind();
+            args.LiftedA = new List<string>().K();
 
             law.TestLaw(args).ShouldBe(true);
         }
@@ -31,7 +31,7 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
         public void PopulatedListInvariantLaw(Law<TestArgs<ListF, string, int, long>> law)
         {
             var args = TestArgs.Default<ListF>();
-            args.LiftedA = new List<string> {args.A}.ToKind();
+            args.LiftedA = new List<string> {args.A}.K();
 
             law.TestLaw(args).ShouldBe(true);
         }
@@ -40,7 +40,7 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
         public void EmptyListFunctorLaw(Law<TestArgs<ListF, string, int, long>> law)
         {
             var args = TestArgs.Default<ListF>();
-            args.LiftedA = new List<string>().ToKind();
+            args.LiftedA = new List<string>().K();
 
             law.TestLaw(args).ShouldBe(true);
         }
@@ -49,7 +49,7 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
         public void PopulatedListFunctorLaw(Law<TestArgs<ListF, string, int, long>> law)
         {
             var args = TestArgs.Default<ListF>();
-            args.LiftedA = new List<string> {args.A}.ToKind();
+            args.LiftedA = new List<string> {args.A}.K();
 
             law.TestLaw(args).ShouldBe(true);
         }
@@ -58,10 +58,10 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
         public void EmptyListApplyLaw(Law<TestArgs<ListF, string, int, long>> law)
         {
             var args = TestArgs.Default<ListF>();
-            args.LiftedA = new List<string>().ToKind();
-            args.LiftedB = new List<int>().ToKind();
-            args.LiftedFuncAtoB = new List<Func<string, int>>().ToKind();
-            args.LiftedFuncBtoC = new List<Func<int, long>>().ToKind();
+            args.LiftedA = new List<string>().K();
+            args.LiftedB = new List<int>().K();
+            args.LiftedFuncAtoB = new List<Func<string, int>>().K();
+            args.LiftedFuncBtoC = new List<Func<int, long>>().K();
 
             law.TestLaw(args).ShouldBe(true);
         }
@@ -70,10 +70,10 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
         public void PopulatedListApplyLaw(Law<TestArgs<ListF, string, int, long>> law)
         {
             var args = TestArgs.Default<ListF>();
-            args.LiftedA = new List<string> {args.A}.ToKind();
-            args.LiftedB = new List<int> {args.B}.ToKind();
-            args.LiftedFuncAtoB = new List<Func<string, int>> {args.FuncAtoB}.ToKind();
-            args.LiftedFuncBtoC = new List<Func<int, long>> {args.FuncBtoC}.ToKind();
+            args.LiftedA = new List<string> {args.A}.K();
+            args.LiftedB = new List<int> {args.B}.K();
+            args.LiftedFuncAtoB = new List<Func<string, int>> {args.FuncAtoB}.K();
+            args.LiftedFuncBtoC = new List<Func<int, long>> {args.FuncBtoC}.K();
 
             law.TestLaw(args).ShouldBe(true);
         }
@@ -82,10 +82,10 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
         public void EmptyListApplicativeLaw(Law<TestArgs<ListF, string, int, long>> law)
         {
             var args = TestArgs.Default<ListF>();
-            args.LiftedA = new List<string>().ToKind();
-            args.LiftedB = new List<int>().ToKind();
-            args.LiftedFuncAtoB = new List<Func<string, int>>().ToKind();
-            args.LiftedFuncBtoC = new List<Func<int, long>>().ToKind();
+            args.LiftedA = new List<string>().K();
+            args.LiftedB = new List<int>().K();
+            args.LiftedFuncAtoB = new List<Func<string, int>>().K();
+            args.LiftedFuncBtoC = new List<Func<int, long>>().K();
 
             law.TestLaw(args).ShouldBe(true);
         }
@@ -94,10 +94,10 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
         public void PopulatedListApplicativeLaw(Law<TestArgs<ListF, string, int, long>> law)
         {
             var args = TestArgs.Default<ListF>();
-            args.LiftedA = new List<string> {args.A}.ToKind();
-            args.LiftedB = new List<int> {args.B}.ToKind();
-            args.LiftedFuncAtoB = new List<Func<string, int>> {args.FuncAtoB}.ToKind();
-            args.LiftedFuncBtoC = new List<Func<int, long>> {args.FuncBtoC}.ToKind();
+            args.LiftedA = new List<string> {args.A}.K();
+            args.LiftedB = new List<int> {args.B}.K();
+            args.LiftedFuncAtoB = new List<Func<string, int>> {args.FuncAtoB}.K();
+            args.LiftedFuncBtoC = new List<Func<int, long>> {args.FuncBtoC}.K();
 
             law.TestLaw(args).ShouldBe(true);
         }

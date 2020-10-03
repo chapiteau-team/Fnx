@@ -624,12 +624,12 @@ namespace Fnx.Core.DataTypes
         public static Result<TOk, TError> Fix<TOk, TError>(this IKind2<ResultF, TOk, TError> self) =>
             (Result<TOk, TError>) self;
 
-        public static IKind<ResultOkF<TError>, TOk> ToKind<TOk, TError>(this Result<TOk, TError> self) => self;
+        public static IKind<ResultOkF<TError>, TOk> K<TOk, TError>(this Result<TOk, TError> self) => self;
 
-        public static IKind<ResultOkF<TError>, TOk> ToKind<TOk, TError>(this Result<Nothing, TError> self) =>
+        public static IKind<ResultOkF<TError>, TOk> K<TOk, TError>(this Result<Nothing, TError> self) =>
             (Result<TOk, TError>) self;
 
-        public static IKind<ResultOkF<TError>, TOk> ToKind<TOk, TError>(this Result<TOk, Nothing> self) =>
+        public static IKind<ResultOkF<TError>, TOk> K<TOk, TError>(this Result<TOk, Nothing> self) =>
             (Result<TOk, TError>) self;
     }
 }

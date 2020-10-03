@@ -25,7 +25,7 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
         public void ErrorInvariantLaw(Law<TestArgs<ResultOkF<bool>, string, int, long>> law)
         {
             var args = TestArgs.Default<ResultOkF<bool>>();
-            args.LiftedA = Error(false).ToKind<string, bool>();
+            args.LiftedA = Error(false).K<string, bool>();
 
             law.TestLaw(args).ShouldBe(true);
         }
@@ -37,7 +37,7 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
         public void OkInvariantLaw(Law<TestArgs<ResultOkF<bool>, string, int, long>> law)
         {
             var args = TestArgs.Default<ResultOkF<bool>>();
-            args.LiftedA = Ok(args.A).ToKind<string, bool>();
+            args.LiftedA = Ok(args.A).K<string, bool>();
 
             law.TestLaw(args).ShouldBe(true);
         }
@@ -49,7 +49,7 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
         public void ErrorFunctorLaw(Law<TestArgs<ResultOkF<bool>, string, int, long>> law)
         {
             var args = TestArgs.Default<ResultOkF<bool>>();
-            args.LiftedA = Error(false).ToKind<string, bool>();
+            args.LiftedA = Error(false).K<string, bool>();
 
             law.TestLaw(args).ShouldBe(true);
         }
@@ -61,7 +61,7 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
         public void OkFunctorLaw(Law<TestArgs<ResultOkF<bool>, string, int, long>> law)
         {
             var args = TestArgs.Default<ResultOkF<bool>>();
-            args.LiftedA = Ok(args.A).ToKind<string, bool>();
+            args.LiftedA = Ok(args.A).K<string, bool>();
 
             law.TestLaw(args).ShouldBe(true);
         }
@@ -73,10 +73,10 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
         public void ErrorApplyLaw(Law<TestArgs<ResultOkF<bool>, string, int, long>> law)
         {
             var args = TestArgs.Default<ResultOkF<bool>>();
-            args.LiftedA = Error(false).ToKind<string, bool>();
-            args.LiftedB = Error(false).ToKind<int, bool>();
-            args.LiftedFuncAtoB = Error(false).ToKind<Func<string, int>, bool>();
-            args.LiftedFuncBtoC = Error(false).ToKind<Func<int, long>, bool>();
+            args.LiftedA = Error(false).K<string, bool>();
+            args.LiftedB = Error(false).K<int, bool>();
+            args.LiftedFuncAtoB = Error(false).K<Func<string, int>, bool>();
+            args.LiftedFuncBtoC = Error(false).K<Func<int, long>, bool>();
 
             law.TestLaw(args).ShouldBe(true);
         }
@@ -88,10 +88,10 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
         public void OkApplyLaw(Law<TestArgs<ResultOkF<bool>, string, int, long>> law)
         {
             var args = TestArgs.Default<ResultOkF<bool>>();
-            args.LiftedA = Ok(args.A).ToKind<string, bool>();
-            args.LiftedB = Ok(args.B).ToKind<int, bool>();
-            args.LiftedFuncAtoB = Ok(args.FuncAtoB).ToKind<Func<string, int>, bool>();
-            args.LiftedFuncBtoC = Ok(args.FuncBtoC).ToKind<Func<int, long>, bool>();
+            args.LiftedA = Ok(args.A).K<string, bool>();
+            args.LiftedB = Ok(args.B).K<int, bool>();
+            args.LiftedFuncAtoB = Ok(args.FuncAtoB).K<Func<string, int>, bool>();
+            args.LiftedFuncBtoC = Ok(args.FuncBtoC).K<Func<int, long>, bool>();
 
             law.TestLaw(args).ShouldBe(true);
         }
@@ -103,10 +103,10 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
         public void ErrorApplicativeLaw(Law<TestArgs<ResultOkF<bool>, string, int, long>> law)
         {
             var args = TestArgs.Default<ResultOkF<bool>>();
-            args.LiftedA = Error(false).ToKind<string, bool>();
-            args.LiftedB = Error(false).ToKind<int, bool>();
-            args.LiftedFuncAtoB = Error(false).ToKind<Func<string, int>, bool>();
-            args.LiftedFuncBtoC = Error(false).ToKind<Func<int, long>, bool>();
+            args.LiftedA = Error(false).K<string, bool>();
+            args.LiftedB = Error(false).K<int, bool>();
+            args.LiftedFuncAtoB = Error(false).K<Func<string, int>, bool>();
+            args.LiftedFuncBtoC = Error(false).K<Func<int, long>, bool>();
 
             law.TestLaw(args).ShouldBe(true);
         }
@@ -118,10 +118,10 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
         public void OkApplicativeLaw(Law<TestArgs<ResultOkF<bool>, string, int, long>> law)
         {
             var args = TestArgs.Default<ResultOkF<bool>>();
-            args.LiftedA = Ok(args.A).ToKind<string, bool>();
-            args.LiftedB = Ok(args.B).ToKind<int, bool>();
-            args.LiftedFuncAtoB = Ok(args.FuncAtoB).ToKind<Func<string, int>, bool>();
-            args.LiftedFuncBtoC = Ok(args.FuncBtoC).ToKind<Func<int, long>, bool>();
+            args.LiftedA = Ok(args.A).K<string, bool>();
+            args.LiftedB = Ok(args.B).K<int, bool>();
+            args.LiftedFuncAtoB = Ok(args.FuncAtoB).K<Func<string, int>, bool>();
+            args.LiftedFuncBtoC = Ok(args.FuncBtoC).K<Func<int, long>, bool>();
 
             law.TestLaw(args).ShouldBe(true);
         }

@@ -1,5 +1,3 @@
-// ReSharper disable UnusedTypeParameter
-
 namespace Fnx.Core.Types
 {
     public interface IKind<out TF, out T>

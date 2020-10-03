@@ -386,8 +386,8 @@ namespace Fnx.Core.DataTypes
 
         public static Option<T> Fix<T>(this IKind<OptionF, T> self) => (Option<T>) self;
 
-        public static IKind<OptionF, T> ToKind<T>(this Option<T> self) => self;
+        public static IKind<OptionF, T> K<T>(this Option<T> self) => self;
 
-        public static IKind<OptionF, T> ToKind<T>(this Option<Nothing> self) => (Option<T>) self;
+        public static IKind<OptionF, T> K<T>(this Option<Nothing> self) => (Option<T>) self;
     }
 }

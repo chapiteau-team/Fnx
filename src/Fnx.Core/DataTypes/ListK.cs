@@ -61,6 +61,6 @@ namespace Fnx.Core.DataTypes
 
         public static List<T> Fix<T>(this IKind<ListF, T> self) => ((ListK<T>) self).List;
 
-        public static IKind<ListF, T> ToKind<T>(this List<T> self) => new ListK<T>(self);
+        public static IKind<ListF, T> K<T>(this List<T> self) => new ListK<T>(self);
     }
 }
