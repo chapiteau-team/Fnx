@@ -10,8 +10,9 @@ namespace Fnx.Core.TypeClasses
     public interface IInvariant<TF>
     {
         /// <summary>
-        /// Transform an F&lt;TA&gt; into an F&lt;TB&gt; by providing a transformation from
-        /// <typeparamref name="TA"/> to <typeparamref name="TB"/>
+        /// Transform an <see cref="IKind{TF,T}"/> of <typeparamref name="TA"/>
+        /// into an <see cref="IKind{TF,T}"/> of <typeparamref name="TB"/>
+        /// by providing a transformation from <typeparamref name="TA"/> to <typeparamref name="TB"/>
         /// and one from <typeparamref name="TB"/> to <typeparamref name="TA"/>.
         /// </summary>
         /// <param name="fa"></param>

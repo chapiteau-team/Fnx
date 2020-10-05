@@ -65,4 +65,14 @@ namespace Fnx.Core.TypeClasses.Instances
         public IKind<ResultOkF<TError>, T> Pure<T>(T value) =>
             new Ok<T, TError>(value);
     }
+
+    public struct ResultFlatMap<TError> : IFlatMap<ResultOkF<TError>>
+    {
+        public IKind<ResultOkF<TError>, TB> Map<TA, TB>(IKind<ResultOkF<TError>, TA> fa, Func<TA, TB> f) =>
+            fa.Fix().Map(f);
+
+        public IKind<ResultOkF<TError>, TB> FlatMap<TA, TB>(
+            IKind<ResultOkF<TError>, TA> fa, Func<TA, IKind<ResultOkF<TError>, TB>> f) =>
+            fa.Fix().FlatMap(x => f(x).Fix());
+    }
 }

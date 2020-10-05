@@ -10,7 +10,8 @@ namespace Fnx.Core.TypeClasses
     public interface IFunctor<TF> : IInvariant<TF>
     {
         /// <summary>
-        /// Transform an F&lt;<typeparamref name="TA"/>&gt; into an F&lt;<typeparamref name="TB"/>&gt;
+        /// Transform an <see cref="IKind{TF,T}"/> of <typeparamref name="TA"/>
+        /// into an <see cref="IKind{TF,T}"/> of <typeparamref name="TB"/>
         /// by providing a transformation from <typeparamref name="TA"/> to <typeparamref name="TB"/>.
         /// </summary>
         /// <param name="fa"></param>
@@ -20,15 +21,7 @@ namespace Fnx.Core.TypeClasses
         /// <returns></returns>
         IKind<TF, TB> Map<TA, TB>(IKind<TF, TA> fa, Func<TA, TB> f);
 
-        /// <summary>
         /// <inheritdoc />
-        /// </summary>
-        /// <param name="fa"></param>
-        /// <param name="f"></param>
-        /// <param name="g"></param>
-        /// <typeparam name="TA"></typeparam>
-        /// <typeparam name="TB"></typeparam>
-        /// <returns></returns>
         IKind<TF, TB> IInvariant<TF>.XMap<TA, TB>(IKind<TF, TA> fa, Func<TA, TB> f, Func<TB, TA> g) =>
             Map(fa, f);
 
@@ -116,7 +109,9 @@ namespace Fnx.Core.TypeClasses
             Map(fa, a => (a, b));
 
         /// <summary>
-        /// Un-zips an F&lt;(<typeparamref name="TA"/>, <typeparamref name="TB"/>)&gt; into two separate F's tupled.
+        /// Un-zips an <see cref="IKind{TF,T}"/> of (<typeparamref name="TA"/>, <typeparamref name="TB"/>)
+        /// into two separate <see cref="IKind{TF,T}"/> of <typeparamref name="TA"/>
+        /// and <see cref="IKind{TF,T}"/> of <typeparamref name="TB"/> tupled.
         /// </summary>
         /// <param name="fab"></param>
         /// <typeparam name="TA"></typeparam>

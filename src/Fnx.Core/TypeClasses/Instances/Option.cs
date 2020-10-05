@@ -65,4 +65,13 @@ namespace Fnx.Core.TypeClasses.Instances
         public IKind<OptionF, T> Pure<T>(T value) =>
             new Some<T>(value);
     }
+
+    public struct OptionFlatMap : IFlatMap<OptionF>
+    {
+        public IKind<OptionF, TB> Map<TA, TB>(IKind<OptionF, TA> fa, Func<TA, TB> f) =>
+            fa.Fix().Map(f);
+
+        public IKind<OptionF, TB> FlatMap<TA, TB>(IKind<OptionF, TA> fa, Func<TA, IKind<OptionF, TB>> f) =>
+            fa.Fix().FlatMap(x => f(x).Fix());
+    }
 }

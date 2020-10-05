@@ -13,9 +13,11 @@ namespace Fnx.Core.Tests.TypeClasses.Laws
 
         public Func<TA, TB> FuncAtoB;
         public IKind<TF, Func<TA, TB>> LiftedFuncAtoB;
+        public Func<TA, IKind<TF, TB>> FuncAtoLiftedB;
         public Func<TB, TA> FuncBtoA;
         public Func<TB, TC> FuncBtoC;
         public IKind<TF, Func<TB, TC>> LiftedFuncBtoC;
+        public Func<TB, IKind<TF, TC>> FuncBtoLiftedC;
         public Func<TC, TB> FuncCtoB;
     }
 

@@ -73,4 +73,13 @@ namespace Fnx.Core.TypeClasses.Instances
         public IKind<ListF, T> Pure<T>(T value) =>
             new List<T> {value}.K();
     }
+
+    public struct ListFlatMap : IFlatMap<ListF>
+    {
+        public IKind<ListF, TB> Map<TA, TB>(IKind<ListF, TA> fa, Func<TA, TB> f) =>
+            fa.Fix().Map(f).K();
+
+        public IKind<ListF, TB> FlatMap<TA, TB>(IKind<ListF, TA> fa, Func<TA, IKind<ListF, TB>> f) =>
+            fa.Fix().FlatMap(x => f(x).Fix()).K();
+    }
 }

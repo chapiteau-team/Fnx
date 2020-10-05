@@ -4,7 +4,7 @@ using Fnx.Core.Types;
 namespace Fnx.Core.TypeClasses
 {
     /// <summary>
-    /// Weaker version of Applicative; has apply but not pure.
+    /// Weaker version of Applicative; Doesn't have Pure.
     /// </summary>
     /// <typeparam name="TF"></typeparam>
     public partial interface IApply<TF> : IFunctor<TF>

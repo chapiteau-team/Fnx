@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Fnx.Core.DataTypes;
 using Fnx.Core.Tests.TypeClasses.Laws;
 using Fnx.Core.TypeClasses.Instances;
@@ -106,6 +107,36 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
             args.LiftedB = Some(args.B);
             args.LiftedFuncAtoB = Some(args.FuncAtoB);
             args.LiftedFuncBtoC = Some(args.FuncBtoC);
+
+            law.TestLaw(args).ShouldBe(true);
+        }
+
+        [Theory]
+        [ClassData(typeof(FlatMapLawsTests<OptionFlatMap, OptionF, OptionEqK, string, int, long>))]
+        public void NoneFlatMapLaw(Law<TestArgs<OptionF, string, int, long>> law)
+        {
+            var args = TestArgs.Default<OptionF>();
+            args.LiftedA = None.K<string>();
+            args.LiftedB = None.K<int>();
+            args.LiftedFuncAtoB = None.K<Func<string, int>>();
+            args.LiftedFuncBtoC = None.K<Func<int, long>>();
+            args.FuncAtoLiftedB = _ => None.K<int>();
+            args.FuncBtoLiftedC = _ => None.K<long>();
+
+            law.TestLaw(args).ShouldBe(true);
+        }
+
+        [Theory]
+        [ClassData(typeof(FlatMapLawsTests<OptionFlatMap, OptionF, OptionEqK, string, int, long>))]
+        public void SomeFlatMapLaw(Law<TestArgs<OptionF, string, int, long>> law)
+        {
+            var args = TestArgs.Default<OptionF>();
+            args.LiftedA = Some(args.A);
+            args.LiftedB = Some(args.B);
+            args.LiftedFuncAtoB = Some(args.FuncAtoB);
+            args.LiftedFuncBtoC = Some(args.FuncBtoC);
+            args.FuncAtoLiftedB = a => Some(args.FuncAtoB(a));
+            args.FuncBtoLiftedC = b => Some(args.FuncBtoC(b));
 
             law.TestLaw(args).ShouldBe(true);
         }

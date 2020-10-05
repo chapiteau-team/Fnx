@@ -17,8 +17,7 @@ namespace Fnx.Laws
 
             return IsEq.EqualUnderLaw(
                 apply.Ap(fbc, apply.Ap(fab, fa)),
-                apply.Ap(apply.Ap(apply.Map(fbc, compose), fab), fa)
-            );
+                apply.Ap(apply.Ap(apply.Map(fbc, compose), fab), fa));
         }
 
         public static IsEq<IKind<TF, TC>> Map2ProductConsistency<TA, TB, TC>(
@@ -28,8 +27,7 @@ namespace Fnx.Laws
 
             return IsEq.EqualUnderLaw(
                 apply.Map2(fa, fb, f),
-                apply.Map(apply.Product(fa, fb), ((TA a, TB b) ab) => f(ab.a, ab.b))
-            );
+                apply.Map(apply.Product(fa, fb), ((TA a, TB b) ab) => f(ab.a, ab.b)));
         }
 
         public static IsEq<IKind<TF, TA>> ProductLConsistency<TA, TB>(IKind<TF, TA> fa, IKind<TF, TB> fb)

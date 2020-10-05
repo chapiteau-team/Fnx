@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Fnx.Core.DataTypes;
 using Fnx.Core.Types;
 
 namespace Fnx.Core.TypeClasses

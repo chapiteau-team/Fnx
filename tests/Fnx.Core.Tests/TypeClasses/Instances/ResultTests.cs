@@ -125,5 +125,39 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
 
             law.TestLaw(args).ShouldBe(true);
         }
+
+        [Theory]
+        [ClassData(
+            typeof(FlatMapLawsTests<ResultFlatMap<bool>, ResultOkF<bool>, ResultEqK<bool, DefaultEq<bool>>,
+                string, int, long>))]
+        public void ErrorFlatMapLaw(Law<TestArgs<ResultOkF<bool>, string, int, long>> law)
+        {
+            var args = TestArgs.Default<ResultOkF<bool>>();
+            args.LiftedA = Error(false).K<string, bool>();
+            args.LiftedB = Error(false).K<int, bool>();
+            args.LiftedFuncAtoB = Error(false).K<Func<string, int>, bool>();
+            args.LiftedFuncBtoC = Error(false).K<Func<int, long>, bool>();
+            args.FuncAtoLiftedB = _ => Error(false).K<int, bool>();
+            args.FuncBtoLiftedC = _ => Error(false).K<long, bool>();
+
+            law.TestLaw(args).ShouldBe(true);
+        }
+
+        [Theory]
+        [ClassData(
+            typeof(FlatMapLawsTests<ResultFlatMap<bool>, ResultOkF<bool>, ResultEqK<bool, DefaultEq<bool>>,
+                string, int, long>))]
+        public void OkFlatMapLaw(Law<TestArgs<ResultOkF<bool>, string, int, long>> law)
+        {
+            var args = TestArgs.Default<ResultOkF<bool>>();
+            args.LiftedA = Ok(args.A).K<string, bool>();
+            args.LiftedB = Ok(args.B).K<int, bool>();
+            args.LiftedFuncAtoB = Ok(args.FuncAtoB).K<Func<string, int>, bool>();
+            args.LiftedFuncBtoC = Ok(args.FuncBtoC).K<Func<int, long>, bool>();
+            args.FuncAtoLiftedB = a => Ok(args.FuncAtoB(a)).K<int, bool>();
+            args.FuncBtoLiftedC = b => Ok(args.FuncBtoC(b)).K<long, bool>();
+
+            law.TestLaw(args).ShouldBe(true);
+        }
     }
 }
