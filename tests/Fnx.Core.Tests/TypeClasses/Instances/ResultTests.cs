@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Fnx.Core.DataTypes;
 using Fnx.Core.Tests.TypeClasses.Laws;
 using Fnx.Core.TypeClasses.Instances;
@@ -10,18 +11,23 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
 {
     public class ResultTests
     {
+        public static IEnumerable<object[]> EqLaws() =>
+            new EqLawsTests<Result<int, string>>(ResultK.Eq(Default<int>.Eq(), Default<string>.Eq()));
+
         [Theory]
-        [ClassData(typeof(EqLawsTests<ResultEq<int, string, DefaultEq<int>, DefaultEq<string>>, Result<int, string>>))]
+        [MemberData(nameof(EqLaws))]
         public void EqLaw(Law<Result<int, string>> law)
         {
             law.TestLaw(Ok(1)).ShouldBe(true);
             law.TestLaw(Error("error")).ShouldBe(true);
         }
 
+        public static IEnumerable<object[]> InvariantLaws() =>
+            new InvariantLawsTests<ResultOkF<bool>, string, int, long>(
+                ResultK<bool>.Invariant(), ResultK.EqK(Default<bool>.Eq()));
+
         [Theory]
-        [ClassData(
-            typeof(InvariantLawsTests<ResultInvariant<bool>, ResultOkF<bool>, ResultEqK<bool, DefaultEq<bool>>,
-                string, int, long>))]
+        [MemberData(nameof(InvariantLaws))]
         public void ErrorInvariantLaw(Law<TestArgs<ResultOkF<bool>, string, int, long>> law)
         {
             var args = TestArgs.Default<ResultOkF<bool>>();
@@ -31,9 +37,7 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
         }
 
         [Theory]
-        [ClassData(
-            typeof(InvariantLawsTests<ResultInvariant<bool>, ResultOkF<bool>, ResultEqK<bool, DefaultEq<bool>>,
-                string, int, long>))]
+        [MemberData(nameof(InvariantLaws))]
         public void OkInvariantLaw(Law<TestArgs<ResultOkF<bool>, string, int, long>> law)
         {
             var args = TestArgs.Default<ResultOkF<bool>>();
@@ -42,10 +46,12 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
             law.TestLaw(args).ShouldBe(true);
         }
 
+        public static IEnumerable<object[]> FunctorLaws() =>
+            new FunctorLawsTests<ResultOkF<bool>, string, int, long>(
+                ResultK<bool>.Functor(), ResultK.EqK(Default<bool>.Eq()));
+
         [Theory]
-        [ClassData(
-            typeof(FunctorLawsTests<ResultFunctor<bool>, ResultOkF<bool>, ResultEqK<bool, DefaultEq<bool>>,
-                string, int, long>))]
+        [MemberData(nameof(FunctorLaws))]
         public void ErrorFunctorLaw(Law<TestArgs<ResultOkF<bool>, string, int, long>> law)
         {
             var args = TestArgs.Default<ResultOkF<bool>>();
@@ -55,9 +61,7 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
         }
 
         [Theory]
-        [ClassData(
-            typeof(FunctorLawsTests<ResultFunctor<bool>, ResultOkF<bool>, ResultEqK<bool, DefaultEq<bool>>,
-                string, int, long>))]
+        [MemberData(nameof(FunctorLaws))]
         public void OkFunctorLaw(Law<TestArgs<ResultOkF<bool>, string, int, long>> law)
         {
             var args = TestArgs.Default<ResultOkF<bool>>();
@@ -66,10 +70,12 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
             law.TestLaw(args).ShouldBe(true);
         }
 
+        public static IEnumerable<object[]> ApplyLaws() =>
+            new ApplyLawsTests<ResultOkF<bool>, string, int, long>(
+                ResultK<bool>.Apply(), ResultK.EqK(Default<bool>.Eq()));
+
         [Theory]
-        [ClassData(
-            typeof(ApplyLawsTests<ResultApply<bool>, ResultOkF<bool>, ResultEqK<bool, DefaultEq<bool>>,
-                string, int, long>))]
+        [MemberData(nameof(ApplyLaws))]
         public void ErrorApplyLaw(Law<TestArgs<ResultOkF<bool>, string, int, long>> law)
         {
             var args = TestArgs.Default<ResultOkF<bool>>();
@@ -82,9 +88,7 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
         }
 
         [Theory]
-        [ClassData(
-            typeof(ApplyLawsTests<ResultApply<bool>, ResultOkF<bool>, ResultEqK<bool, DefaultEq<bool>>,
-                string, int, long>))]
+        [MemberData(nameof(ApplyLaws))]
         public void OkApplyLaw(Law<TestArgs<ResultOkF<bool>, string, int, long>> law)
         {
             var args = TestArgs.Default<ResultOkF<bool>>();
@@ -96,10 +100,12 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
             law.TestLaw(args).ShouldBe(true);
         }
 
+        public static IEnumerable<object[]> ApplicativeLaws() =>
+            new ApplicativeLawsTests<ResultOkF<bool>, string, int, long>(
+                ResultK<bool>.Applicative(), ResultK.EqK(Default<bool>.Eq()));
+
         [Theory]
-        [ClassData(
-            typeof(ApplicativeLawsTests<ResultApplicative<bool>, ResultOkF<bool>, ResultEqK<bool, DefaultEq<bool>>,
-                string, int, long>))]
+        [MemberData(nameof(ApplicativeLaws))]
         public void ErrorApplicativeLaw(Law<TestArgs<ResultOkF<bool>, string, int, long>> law)
         {
             var args = TestArgs.Default<ResultOkF<bool>>();
@@ -112,9 +118,7 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
         }
 
         [Theory]
-        [ClassData(
-            typeof(ApplicativeLawsTests<ResultApplicative<bool>, ResultOkF<bool>, ResultEqK<bool, DefaultEq<bool>>,
-                string, int, long>))]
+        [MemberData(nameof(ApplicativeLaws))]
         public void OkApplicativeLaw(Law<TestArgs<ResultOkF<bool>, string, int, long>> law)
         {
             var args = TestArgs.Default<ResultOkF<bool>>();
@@ -126,10 +130,12 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
             law.TestLaw(args).ShouldBe(true);
         }
 
+        public static IEnumerable<object[]> FlatMapLaws() =>
+            new FlatMapLawsTests<ResultOkF<bool>, string, int, long>(
+                ResultK<bool>.FlatMap(), ResultK.EqK(Default<bool>.Eq()));
+
         [Theory]
-        [ClassData(
-            typeof(FlatMapLawsTests<ResultFlatMap<bool>, ResultOkF<bool>, ResultEqK<bool, DefaultEq<bool>>,
-                string, int, long>))]
+        [MemberData(nameof(FlatMapLaws))]
         public void ErrorFlatMapLaw(Law<TestArgs<ResultOkF<bool>, string, int, long>> law)
         {
             var args = TestArgs.Default<ResultOkF<bool>>();
@@ -144,9 +150,7 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
         }
 
         [Theory]
-        [ClassData(
-            typeof(FlatMapLawsTests<ResultFlatMap<bool>, ResultOkF<bool>, ResultEqK<bool, DefaultEq<bool>>,
-                string, int, long>))]
+        [MemberData(nameof(FlatMapLaws))]
         public void OkFlatMapLaw(Law<TestArgs<ResultOkF<bool>, string, int, long>> law)
         {
             var args = TestArgs.Default<ResultOkF<bool>>();

@@ -10,16 +10,22 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
 {
     public class ListTests
     {
+        public static IEnumerable<object[]> EqLaws() =>
+            new EqLawsTests<List<string>>(ListK.Eq(Default<string>.Eq()));
+
         [Theory]
-        [ClassData(typeof(EqLawsTests<ListEq<string, DefaultEq<string>>, List<string>>))]
+        [MemberData(nameof(EqLaws))]
         public void EqLaw(Law<List<string>> law)
         {
             law.TestLaw(new List<string>()).ShouldBe(true);
             law.TestLaw(new List<string> {"1"}).ShouldBe(true);
         }
 
+        public static IEnumerable<object[]> InvariantLaws() =>
+            new InvariantLawsTests<ListF, string, int, long>(ListK.Invariant(), ListK.EqK());
+
         [Theory]
-        [ClassData(typeof(InvariantLawsTests<ListInvariant, ListF, ListEqK, string, int, long>))]
+        [MemberData(nameof(InvariantLaws))]
         public void EmptyListInvariantLaw(Law<TestArgs<ListF, string, int, long>> law)
         {
             var args = TestArgs.Default<ListF>();
@@ -29,7 +35,7 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
         }
 
         [Theory]
-        [ClassData(typeof(InvariantLawsTests<ListInvariant, ListF, ListEqK, string, int, long>))]
+        [MemberData(nameof(InvariantLaws))]
         public void PopulatedListInvariantLaw(Law<TestArgs<ListF, string, int, long>> law)
         {
             var args = TestArgs.Default<ListF>();
@@ -38,8 +44,11 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
             law.TestLaw(args).ShouldBe(true);
         }
 
+        public static IEnumerable<object[]> FunctorLaws() =>
+            new FunctorLawsTests<ListF, string, int, long>(ListK.Functor(), ListK.EqK());
+
         [Theory]
-        [ClassData(typeof(FunctorLawsTests<ListFunctor, ListF, ListEqK, string, int, long>))]
+        [MemberData(nameof(FunctorLaws))]
         public void EmptyListFunctorLaw(Law<TestArgs<ListF, string, int, long>> law)
         {
             var args = TestArgs.Default<ListF>();
@@ -49,7 +58,7 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
         }
 
         [Theory]
-        [ClassData(typeof(FunctorLawsTests<ListFunctor, ListF, ListEqK, string, int, long>))]
+        [MemberData(nameof(FunctorLaws))]
         public void PopulatedListFunctorLaw(Law<TestArgs<ListF, string, int, long>> law)
         {
             var args = TestArgs.Default<ListF>();
@@ -58,8 +67,11 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
             law.TestLaw(args).ShouldBe(true);
         }
 
+        public static IEnumerable<object[]> ApplyLaws() =>
+            new ApplyLawsTests<ListF, string, int, long>(ListK.Apply(), ListK.EqK());
+
         [Theory]
-        [ClassData(typeof(ApplyLawsTests<ListApply, ListF, ListEqK, string, int, long>))]
+        [MemberData(nameof(ApplyLaws))]
         public void EmptyListApplyLaw(Law<TestArgs<ListF, string, int, long>> law)
         {
             var args = TestArgs.Default<ListF>();
@@ -72,7 +84,7 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
         }
 
         [Theory]
-        [ClassData(typeof(ApplyLawsTests<ListApply, ListF, ListEqK, string, int, long>))]
+        [MemberData(nameof(ApplyLaws))]
         public void PopulatedListApplyLaw(Law<TestArgs<ListF, string, int, long>> law)
         {
             var args = TestArgs.Default<ListF>();
@@ -84,8 +96,11 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
             law.TestLaw(args).ShouldBe(true);
         }
 
+        public static IEnumerable<object[]> ApplicativeLaws() =>
+            new ApplicativeLawsTests<ListF, string, int, long>(ListK.Applicative(), ListK.EqK());
+
         [Theory]
-        [ClassData(typeof(ApplicativeLawsTests<ListApplicative, ListF, ListEqK, string, int, long>))]
+        [MemberData(nameof(ApplicativeLaws))]
         public void EmptyListApplicativeLaw(Law<TestArgs<ListF, string, int, long>> law)
         {
             var args = TestArgs.Default<ListF>();
@@ -98,7 +113,7 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
         }
 
         [Theory]
-        [ClassData(typeof(ApplicativeLawsTests<ListApplicative, ListF, ListEqK, string, int, long>))]
+        [MemberData(nameof(ApplicativeLaws))]
         public void PopulatedListApplicativeLaw(Law<TestArgs<ListF, string, int, long>> law)
         {
             var args = TestArgs.Default<ListF>();
@@ -110,8 +125,11 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
             law.TestLaw(args).ShouldBe(true);
         }
 
+        public static IEnumerable<object[]> FlatMapLaws() =>
+            new FlatMapLawsTests<ListF, string, int, long>(ListK.FlatMap(), ListK.EqK());
+
         [Theory]
-        [ClassData(typeof(FlatMapLawsTests<ListFlatMap, ListF, ListEqK, string, int, long>))]
+        [MemberData(nameof(FlatMapLaws))]
         public void EmptyListFlatMapLaw(Law<TestArgs<ListF, string, int, long>> law)
         {
             var args = TestArgs.Default<ListF>();
@@ -126,7 +144,7 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
         }
 
         [Theory]
-        [ClassData(typeof(FlatMapLawsTests<ListFlatMap, ListF, ListEqK, string, int, long>))]
+        [MemberData(nameof(FlatMapLaws))]
         public void PopulatedListFlatMapLaw(Law<TestArgs<ListF, string, int, long>> law)
         {
             var args = TestArgs.Default<ListF>();

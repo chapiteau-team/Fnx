@@ -4,32 +4,26 @@ using Fnx.Core.Types;
 
 namespace Fnx.Laws
 {
-    public static class FlatMapLaws<TFlatMap, TF>
-        where TFlatMap : struct, IFlatMap<TF>
+    public class FlatMapLaws<TF>
     {
-        public static IsEq<IKind<TF, TC>> FlatMapAssociativity<TA, TB, TC>(
-            IKind<TF, TA> fa, Func<TA, IKind<TF, TB>> f, Func<TB, IKind<TF, TC>> g)
-        {
-            var fm = default(TFlatMap);
-            return IsEq.EqualUnderLaw(
-                fm.FlatMap(fm.FlatMap(fa, f), g),
-                fm.FlatMap(fa, a => fm.FlatMap(f(a), g)));
-        }
+        private readonly IFlatMap<TF> _flatMap;
 
-        public static IsEq<IKind<TF, TB>> FlatMapConsistentApply<TA, TB>(IKind<TF, TA> fa, IKind<TF, Func<TA, TB>> ff)
-        {
-            var fm = default(TFlatMap);
-            return IsEq.EqualUnderLaw(
-                fm.Ap(ff, fa),
-                fm.FlatMap(ff, f => fm.Map(fa, f)));
-        }
+        public FlatMapLaws(IFlatMap<TF> flatMap) => _flatMap = flatMap;
 
-        public static IsEq<IKind<TF, (TA, TB)>> MProductConsistency<TA, TB>(IKind<TF, TA> fa, Func<TA, IKind<TF, TB>> f)
-        {
-            var fm = default(TFlatMap);
-            return IsEq.EqualUnderLaw(
-                fm.MProduct(fa, f),
-                fm.FlatMap(fa, a => fm.Map(f(a), b => (a, b))));
-        }
+        public IsEq<IKind<TF, TC>> FlatMapAssociativity<TA, TB, TC>(
+            IKind<TF, TA> fa, Func<TA, IKind<TF, TB>> f, Func<TB, IKind<TF, TC>> g) =>
+            IsEq.EqualUnderLaw(
+                _flatMap.FlatMap(_flatMap.FlatMap(fa, f), g),
+                _flatMap.FlatMap(fa, a => _flatMap.FlatMap(f(a), g)));
+
+        public IsEq<IKind<TF, TB>> FlatMapConsistentApply<TA, TB>(IKind<TF, TA> fa, IKind<TF, Func<TA, TB>> ff) =>
+            IsEq.EqualUnderLaw(
+                _flatMap.Ap(ff, fa),
+                _flatMap.FlatMap(ff, f => _flatMap.Map(fa, f)));
+
+        public IsEq<IKind<TF, (TA, TB)>> MProductConsistency<TA, TB>(IKind<TF, TA> fa, Func<TA, IKind<TF, TB>> f) =>
+            IsEq.EqualUnderLaw(
+                _flatMap.MProduct(fa, f),
+                _flatMap.FlatMap(fa, a => _flatMap.Map(f(a), b => (a, b))));
     }
 }

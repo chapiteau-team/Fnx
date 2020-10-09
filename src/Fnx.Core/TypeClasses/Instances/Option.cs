@@ -4,34 +4,37 @@ using Fnx.Core.Types;
 
 namespace Fnx.Core.TypeClasses.Instances
 {
-    public struct OptionEq<T, TEq> : IEq<Option<T>>
-        where TEq : struct, IEq<T>
+    public class OptionEq<T> : IEq<Option<T>>
     {
+        private readonly IEq<T> _eq;
+
+        public OptionEq(IEq<T> eq) => _eq = eq;
+
         public bool Eqv(Option<T> a, Option<T> b) =>
             a.IsSome
-                ? b.IsSome && default(TEq).Eqv(a.Get(), b.Get())
+                ? b.IsSome && _eq.Eqv(a.Get(), b.Get())
                 : !b.IsSome;
     }
 
-    public struct OptionEqK : IEqK<OptionF>
+    public class OptionEqK : IEqK<OptionF>
     {
-        public bool EqK<T, TEq>(IKind<OptionF, T> x, IKind<OptionF, T> y) where TEq : struct, IEq<T> =>
-            default(OptionEq<T, TEq>).Eqv(x.Fix(), y.Fix());
+        public bool EqK<T>(IKind<OptionF, T> x, IKind<OptionF, T> y, IEq<T> eq) =>
+            OptionK.Eq(eq).Eqv(x.Fix(), y.Fix());
     }
 
-    public struct OptionInvariant : IInvariant<OptionF>
+    public class OptionInvariant : IInvariant<OptionF>
     {
         public IKind<OptionF, TB> XMap<TA, TB>(IKind<OptionF, TA> fa, Func<TA, TB> f, Func<TB, TA> g) =>
             fa.Fix().Map(f);
     }
 
-    public struct OptionFunctor : IFunctor<OptionF>
+    public class OptionFunctor : IFunctor<OptionF>
     {
         public IKind<OptionF, TB> Map<TA, TB>(IKind<OptionF, TA> fa, Func<TA, TB> f) =>
             fa.Fix().Map(f);
     }
 
-    public struct OptionApply : IApply<OptionF>
+    public class OptionApply : IApply<OptionF>
     {
         public IKind<OptionF, TB> Map<TA, TB>(IKind<OptionF, TA> fa, Func<TA, TB> f) =>
             fa.Fix().Map(f);
@@ -47,7 +50,7 @@ namespace Fnx.Core.TypeClasses.Instances
         }
     }
 
-    public struct OptionApplicative : IApplicative<OptionF>
+    public class OptionApplicative : IApplicative<OptionF>
     {
         public IKind<OptionF, TB> Map<TA, TB>(IKind<OptionF, TA> fa, Func<TA, TB> f) =>
             fa.Fix().Map(f);
@@ -66,12 +69,35 @@ namespace Fnx.Core.TypeClasses.Instances
             new Some<T>(value);
     }
 
-    public struct OptionFlatMap : IFlatMap<OptionF>
+    public class OptionFlatMap : IFlatMap<OptionF>
     {
         public IKind<OptionF, TB> Map<TA, TB>(IKind<OptionF, TA> fa, Func<TA, TB> f) =>
             fa.Fix().Map(f);
 
         public IKind<OptionF, TB> FlatMap<TA, TB>(IKind<OptionF, TA> fa, Func<TA, IKind<OptionF, TB>> f) =>
             fa.Fix().FlatMap(x => f(x).Fix());
+    }
+
+    public static class OptionK
+    {
+        public static IEq<Option<T>> Eq<T>(IEq<T> eq) => new OptionEq<T>(eq);
+
+        private static readonly IEqK<OptionF> EqkSingleton = new OptionEqK();
+        public static IEqK<OptionF> EqK() => EqkSingleton;
+
+        private static readonly IInvariant<OptionF> InvariantSingleton = new OptionInvariant();
+        public static IInvariant<OptionF> Invariant() => InvariantSingleton;
+
+        private static readonly IFunctor<OptionF> FunctorSingleton = new OptionFunctor();
+        public static IFunctor<OptionF> Functor() => FunctorSingleton;
+
+        private static readonly IApply<OptionF> ApplySingleton = new OptionApply();
+        public static IApply<OptionF> Apply() => ApplySingleton;
+
+        private static readonly IApplicative<OptionF> ApplicativeSingleton = new OptionApplicative();
+        public static IApplicative<OptionF> Applicative() => ApplicativeSingleton;
+
+        private static readonly IFlatMap<OptionF> FlatMapSingleton = new OptionFlatMap();
+        public static IFlatMap<OptionF> FlatMap() => FlatMapSingleton;
     }
 }

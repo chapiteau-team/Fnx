@@ -15,13 +15,11 @@ namespace Fnx.Core.TypeClasses
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
+        /// <param name="eqOk"></param>
+        /// <param name="eqB"></param>
         /// <typeparam name="TA"></typeparam>
         /// <typeparam name="TB"></typeparam>
-        /// <typeparam name="TEqA"></typeparam>
-        /// <typeparam name="TEqB"></typeparam>
         /// <returns></returns>
-        bool EqK<TA, TB, TEqA, TEqB>(IKind2<TF, TA, TB> x, IKind2<TF, TA, TB> y)
-            where TEqA : struct, IEq<TA>
-            where TEqB : struct, IEq<TB>;
+        bool EqK<TA, TB>(IKind2<TF, TA, TB> x, IKind2<TF, TA, TB> y, IEq<TA> eqOk, IEq<TB> eqB);
     }
 }

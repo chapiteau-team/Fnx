@@ -5,47 +5,35 @@ using Fnx.Core.Types;
 
 namespace Fnx.Laws
 {
-    public static class ApplicativeLaws<TApplicative, TF>
-        where TApplicative : struct, IApplicative<TF>
+    public class ApplicativeLaws<TF>
     {
-        public static IsEq<IKind<TF, TA>> ApplicativeIdentity<TA>(IKind<TF, TA> fa)
-        {
-            var ap = default(TApplicative);
-            return IsEq.EqualUnderLaw(
-                ap.Ap(ap.Pure<Func<TA, TA>>(Combinators.I), fa),
+        private readonly IApplicative<TF> _applicative;
+
+        public ApplicativeLaws(IApplicative<TF> applicative) => _applicative = applicative;
+
+        public IsEq<IKind<TF, TA>> ApplicativeIdentity<TA>(IKind<TF, TA> fa) =>
+            IsEq.EqualUnderLaw(
+                _applicative.Ap(_applicative.Pure<Func<TA, TA>>(Combinators.I), fa),
                 fa);
-        }
 
-        public static IsEq<IKind<TF, TB>> ApplicativeHomomorphism<TA, TB>(TA a, Func<TA, TB> f)
-        {
-            var ap = default(TApplicative);
-            return IsEq.EqualUnderLaw(
-                ap.Ap(ap.Pure(f), ap.Pure(a)),
-                ap.Pure(f(a)));
-        }
+        public IsEq<IKind<TF, TB>> ApplicativeHomomorphism<TA, TB>(TA a, Func<TA, TB> f) =>
+            IsEq.EqualUnderLaw(
+                _applicative.Ap(_applicative.Pure(f), _applicative.Pure(a)),
+                _applicative.Pure(f(a)));
 
-        public static IsEq<IKind<TF, TB>> ApplicativeInterchange<TA, TB>(TA a, IKind<TF, Func<TA, TB>> ff)
-        {
-            var ap = default(TApplicative);
-            return IsEq.EqualUnderLaw(
-                ap.Ap(ff, ap.Pure(a)),
-                ap.Ap(ap.Pure<Func<Func<TA, TB>, TB>>(f => f(a)), ff));
-        }
+        public IsEq<IKind<TF, TB>> ApplicativeInterchange<TA, TB>(TA a, IKind<TF, Func<TA, TB>> ff) =>
+            IsEq.EqualUnderLaw(
+                _applicative.Ap(ff, _applicative.Pure(a)),
+                _applicative.Ap(_applicative.Pure<Func<Func<TA, TB>, TB>>(f => f(a)), ff));
 
-        public static IsEq<IKind<TF, TB>> ApplicativeMap<TA, TB>(IKind<TF, TA> fa, Func<TA, TB> f)
-        {
-            var ap = default(TApplicative);
-            return IsEq.EqualUnderLaw(
-                ap.Map(fa, f),
-                ap.Ap(ap.Pure(f), fa));
-        }
+        public IsEq<IKind<TF, TB>> ApplicativeMap<TA, TB>(IKind<TF, TA> fa, Func<TA, TB> f) =>
+            IsEq.EqualUnderLaw(
+                _applicative.Map(fa, f),
+                _applicative.Ap(_applicative.Pure(f), fa));
 
-        public static IsEq<IKind<TF, TB>> ApProductConsistent<TA, TB>(IKind<TF, TA> fa, IKind<TF, Func<TA, TB>> ff)
-        {
-            var ap = default(TApplicative);
-            return IsEq.EqualUnderLaw(
-                ap.Ap(ff, fa),
-                ap.Map(ap.Product(fa, ff), ((TA a, Func<TA, TB> f) x) => x.f(x.a)));
-        }
+        public IsEq<IKind<TF, TB>> ApProductConsistent<TA, TB>(IKind<TF, TA> fa, IKind<TF, Func<TA, TB>> ff) =>
+            IsEq.EqualUnderLaw(
+                _applicative.Ap(ff, fa),
+                _applicative.Map(_applicative.Product(fa, ff), ((TA a, Func<TA, TB> f) x) => x.f(x.a)));
     }
 }

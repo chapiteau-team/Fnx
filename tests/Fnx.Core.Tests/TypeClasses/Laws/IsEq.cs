@@ -7,11 +7,10 @@ namespace Fnx.Core.Tests.TypeClasses.Laws
 {
     public static class IsEq
     {
-        public static bool Holds<TF, T, TEqK>(this IsEq<IKind<TF, T>> self)
-            where TEqK : struct, IEqK<TF> =>
+        public static bool Holds<TF, T>(this IsEq<IKind<TF, T>> self, IEqK<TF> eqK) =>
             self switch
             {
-                var (x, y) => default(TEqK).EqK<T, DefaultEq<T>>(x, y)
+                var (x, y) => eqK.EqK(x, y, Default<T>.Eq())
             };
     }
 }

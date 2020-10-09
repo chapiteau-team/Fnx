@@ -11,16 +11,22 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
 {
     public class OptionTests
     {
+        public static IEnumerable<object[]> EqLaws() =>
+            new EqLawsTests<Option<string>>(OptionK.Eq(Default<string>.Eq()));
+
         [Theory]
-        [ClassData(typeof(EqLawsTests<OptionEq<string, DefaultEq<string>>, Option<string>>))]
+        [MemberData(nameof(EqLaws))]
         public void EqLaw(Law<Option<string>> law)
         {
             law.TestLaw(None).ShouldBe(true);
             law.TestLaw(Some("1")).ShouldBe(true);
         }
 
+        public static IEnumerable<object[]> InvariantLaws() =>
+            new InvariantLawsTests<OptionF, string, int, long>(OptionK.Invariant(), OptionK.EqK());
+
         [Theory]
-        [ClassData(typeof(InvariantLawsTests<OptionInvariant, OptionF, OptionEqK, string, int, long>))]
+        [MemberData(nameof(InvariantLaws))]
         public void NoneInvariantLaw(Law<TestArgs<OptionF, string, int, long>> law)
         {
             var args = TestArgs.Default<OptionF>();
@@ -30,7 +36,7 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
         }
 
         [Theory]
-        [ClassData(typeof(InvariantLawsTests<OptionInvariant, OptionF, OptionEqK, string, int, long>))]
+        [MemberData(nameof(InvariantLaws))]
         public void SomeInvariantLaw(Law<TestArgs<OptionF, string, int, long>> law)
         {
             var args = TestArgs.Default<OptionF>();
@@ -39,8 +45,11 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
             law.TestLaw(args).ShouldBe(true);
         }
 
+        public static IEnumerable<object[]> FunctorLaws() =>
+            new FunctorLawsTests<OptionF, string, int, long>(OptionK.Functor(), OptionK.EqK());
+
         [Theory]
-        [ClassData(typeof(FunctorLawsTests<OptionFunctor, OptionF, OptionEqK, string, int, long>))]
+        [MemberData(nameof(FunctorLaws))]
         public void NoneFunctorLaw(Law<TestArgs<OptionF, string, int, long>> law)
         {
             var args = TestArgs.Default<OptionF>();
@@ -50,7 +59,7 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
         }
 
         [Theory]
-        [ClassData(typeof(FunctorLawsTests<OptionFunctor, OptionF, OptionEqK, string, int, long>))]
+        [MemberData(nameof(FunctorLaws))]
         public void SomeFunctorLaw(Law<TestArgs<OptionF, string, int, long>> law)
         {
             var args = TestArgs.Default<OptionF>();
@@ -59,8 +68,11 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
             law.TestLaw(args).ShouldBe(true);
         }
 
+        public static IEnumerable<object[]> ApplyLaws() =>
+            new ApplyLawsTests<OptionF, string, int, long>(OptionK.Apply(), OptionK.EqK());
+
         [Theory]
-        [ClassData(typeof(ApplyLawsTests<OptionApply, OptionF, OptionEqK, string, int, long>))]
+        [MemberData(nameof(ApplyLaws))]
         public void NoneApplyLaw(Law<TestArgs<OptionF, string, int, long>> law)
         {
             var args = TestArgs.Default<OptionF>();
@@ -73,7 +85,7 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
         }
 
         [Theory]
-        [ClassData(typeof(ApplyLawsTests<OptionApply, OptionF, OptionEqK, string, int, long>))]
+        [MemberData(nameof(ApplyLaws))]
         public void SomeApplyLaw(Law<TestArgs<OptionF, string, int, long>> law)
         {
             var args = TestArgs.Default<OptionF>();
@@ -85,8 +97,11 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
             law.TestLaw(args).ShouldBe(true);
         }
 
+        public static IEnumerable<object[]> ApplicativeLaws() =>
+            new ApplicativeLawsTests<OptionF, string, int, long>(OptionK.Applicative(), OptionK.EqK());
+
         [Theory]
-        [ClassData(typeof(ApplicativeLawsTests<OptionApplicative, OptionF, OptionEqK, string, int, long>))]
+        [MemberData(nameof(ApplicativeLaws))]
         public void NoneApplicativeLaw(Law<TestArgs<OptionF, string, int, long>> law)
         {
             var args = TestArgs.Default<OptionF>();
@@ -99,7 +114,7 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
         }
 
         [Theory]
-        [ClassData(typeof(ApplicativeLawsTests<OptionApplicative, OptionF, OptionEqK, string, int, long>))]
+        [MemberData(nameof(ApplicativeLaws))]
         public void SomeApplicativeLaw(Law<TestArgs<OptionF, string, int, long>> law)
         {
             var args = TestArgs.Default<OptionF>();
@@ -111,8 +126,11 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
             law.TestLaw(args).ShouldBe(true);
         }
 
+        public static IEnumerable<object[]> FlatMapLaws() =>
+            new FlatMapLawsTests<OptionF, string, int, long>(OptionK.FlatMap(), OptionK.EqK());
+
         [Theory]
-        [ClassData(typeof(FlatMapLawsTests<OptionFlatMap, OptionF, OptionEqK, string, int, long>))]
+        [MemberData(nameof(FlatMapLaws))]
         public void NoneFlatMapLaw(Law<TestArgs<OptionF, string, int, long>> law)
         {
             var args = TestArgs.Default<OptionF>();
@@ -127,7 +145,7 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
         }
 
         [Theory]
-        [ClassData(typeof(FlatMapLawsTests<OptionFlatMap, OptionF, OptionEqK, string, int, long>))]
+        [MemberData(nameof(FlatMapLaws))]
         public void SomeFlatMapLaw(Law<TestArgs<OptionF, string, int, long>> law)
         {
             var args = TestArgs.Default<OptionF>();

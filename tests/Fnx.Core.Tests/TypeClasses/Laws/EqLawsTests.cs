@@ -3,15 +3,16 @@ using Fnx.Laws;
 
 namespace Fnx.Core.Tests.TypeClasses.Laws
 {
-    public class EqLawsTests<TEq, T> : LawTests<T>
-        where TEq : struct, IEq<T>
+    public class EqLawsTests<T> : LawTests<T>
     {
-        public EqLawsTests()
+        public EqLawsTests(IEq<T> eq)
         {
-            Add("Reflexivity", EqLaws<TEq, T>.Reflexivity);
-            Add("Symmetry", x => EqLaws<TEq, T>.Symmetry(x, x));
-            Add("Substitution", x => EqLaws<TEq, T>.Substitution(x, x, Combinators.I));
-            Add("Transitivity", x => EqLaws<TEq, T>.Transitivity(x, x, x));
+            var eqLaws = new EqLaws<T>(eq);
+
+            Add("Reflexivity", eqLaws.Reflexivity);
+            Add("Symmetry", x => eqLaws.Symmetry(x, x));
+            Add("Substitution", x => eqLaws.Substitution(x, x, Combinators.I));
+            Add("Transitivity", x => eqLaws.Transitivity(x, x, x));
         }
     }
 }

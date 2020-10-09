@@ -35,7 +35,7 @@ namespace Fnx.Core.TypeClasses
         IKind<TF, TB> Widen<TA, TB>(IKind<TF, TA> fa) where TA : TB => (IKind<TF, TB>) fa;
 
         /// <summary>
-        /// Lift a function f to operate on Functors.
+        /// Lift a function <paramref name="f"/> to operate on Functors.
         /// </summary>
         /// <param name="f"></param>
         /// <typeparam name="TA"></typeparam>

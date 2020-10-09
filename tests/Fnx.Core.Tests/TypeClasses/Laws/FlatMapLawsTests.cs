@@ -3,23 +3,20 @@ using Fnx.Laws;
 
 namespace Fnx.Core.Tests.TypeClasses.Laws
 {
-    public class FlatMapLawsTests<TFlatMap, TF, TEqK, TA, TB, TC> : ApplyLawsTests<TFlatMap, TF, TEqK, TA, TB, TC>
-        where TFlatMap : struct, IFlatMap<TF>
-        where TEqK : struct, IEqK<TF>
+    public class FlatMapLawsTests<TF, TA, TB, TC> : ApplyLawsTests<TF, TA, TB, TC>
     {
-        public FlatMapLawsTests()
+        public FlatMapLawsTests(IFlatMap<TF> flatMap, IEqK<TF> eqK) : base(flatMap, eqK)
         {
+            var flatMapLaws = new FlatMapLaws<TF>(flatMap);
+
             Add("FlatMap Associativity", args =>
-                FlatMapLaws<TFlatMap, TF>.FlatMapAssociativity(args.LiftedA, args.FuncAtoLiftedB, args.FuncBtoLiftedC)
-                    .Holds<TF, TC, TEqK>());
+                flatMapLaws.FlatMapAssociativity(args.LiftedA, args.FuncAtoLiftedB, args.FuncBtoLiftedC).Holds(eqK));
 
             Add("FlatMap Consistent Apply", args =>
-                FlatMapLaws<TFlatMap, TF>.FlatMapConsistentApply(args.LiftedA, args.LiftedFuncAtoB)
-                    .Holds<TF, TB, TEqK>());
+                flatMapLaws.FlatMapConsistentApply(args.LiftedA, args.LiftedFuncAtoB).Holds(eqK));
 
             Add("MProduct Consistency", args =>
-                FlatMapLaws<TFlatMap, TF>.MProductConsistency(args.LiftedA, args.FuncAtoLiftedB)
-                    .Holds<TF, (TA, TB), TEqK>());
+                flatMapLaws.MProductConsistency(args.LiftedA, args.FuncAtoLiftedB).Holds(eqK));
         }
     }
 }

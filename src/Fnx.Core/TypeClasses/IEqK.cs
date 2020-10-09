@@ -14,9 +14,9 @@ namespace Fnx.Core.TypeClasses
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
+        /// <param name="eq"></param>
         /// <typeparam name="T"></typeparam>
-        /// <typeparam name="TEq"></typeparam>
         /// <returns></returns>
-        bool EqK<T, TEq>(IKind<TF, T> x, IKind<TF, T> y) where TEq : struct, IEq<T>;
+        bool EqK<T>(IKind<TF, T> x, IKind<TF, T> y, IEq<T> eq);
     }
 }

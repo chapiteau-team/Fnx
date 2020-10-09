@@ -3,27 +3,22 @@ using Fnx.Core.TypeClasses;
 
 namespace Fnx.Laws
 {
-    public static class EqLaws<TEq, T>
-        where TEq : struct, IEq<T>
+    public class EqLaws<T>
     {
-        public static bool Reflexivity(T x) => default(TEq).Eqv(x, x);
+        private readonly IEq<T> _eq;
 
-        public static bool Symmetry(T x, T y)
-        {
-            var eq = default(TEq);
-            return eq.Eqv(x, y) == eq.Eqv(y, x);
-        }
+        public EqLaws(IEq<T> eq) => _eq = eq;
 
-        public static bool Substitution(T x, T y, Func<T, T> f)
-        {
-            var eq = default(TEq);
-            return eq.NEqv(x, y) || eq.Eqv(f(x), f(y));
-        }
+        public bool Reflexivity(T x) =>
+            _eq.Eqv(x, x);
 
-        public static bool Transitivity(T x, T y, T z)
-        {
-            var eq = default(TEq);
-            return !(eq.Eqv(x, y) && eq.Eqv(y, z)) || eq.Eqv(x, z);
-        }
+        public bool Symmetry(T x, T y) =>
+            _eq.Eqv(x, y) == _eq.Eqv(y, x);
+
+        public bool Substitution(T x, T y, Func<T, T> f) =>
+            _eq.NEqv(x, y) || _eq.Eqv(f(x), f(y));
+
+        public bool Transitivity(T x, T y, T z) =>
+            !(_eq.Eqv(x, y) && _eq.Eqv(y, z)) || _eq.Eqv(x, z);
     }
 }

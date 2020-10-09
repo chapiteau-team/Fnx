@@ -6,20 +6,22 @@ using Fnx.Core.Types;
 
 namespace Fnx.Laws
 {
-    public static class InvariantLaws<TInvariant, TF>
-        where TInvariant : struct, IInvariant<TF>
+    public class InvariantLaws<TF>
     {
-        public static IsEq<IKind<TF, TA>> InvariantIdentity<TA>(IKind<TF, TA> fa) =>
+        private readonly IInvariant<TF> _invariant;
+
+        public InvariantLaws(IInvariant<TF> invariant) => _invariant = invariant;
+
+        public IsEq<IKind<TF, TA>> InvariantIdentity<TA>(IKind<TF, TA> fa) =>
             IsEq.EqualUnderLaw(
                 fa,
-                default(TInvariant).XMap(fa, Combinators.I, Combinators.I));
+                _invariant.XMap(fa, Combinators.I, Combinators.I));
 
-        public static IsEq<IKind<TF, TC>> InvariantComposition<TA, TB, TC>(
+        public IsEq<IKind<TF, TC>> InvariantComposition<TA, TB, TC>(
             IKind<TF, TA> fa, Func<TA, TB> f1, Func<TB, TA> f2, Func<TB, TC> g1, Func<TC, TB> g2)
         {
-            var invariant = default(TInvariant);
-            var a = invariant.XMap(invariant.XMap(fa, f1, f2), g1, g2);
-            var b = invariant.XMap(fa, g1.Compose(f1), f2.Compose(g2));
+            var a = _invariant.XMap(_invariant.XMap(fa, f1, f2), g1, g2);
+            var b = _invariant.XMap(fa, g1.Compose(f1), f2.Compose(g2));
             return IsEq.EqualUnderLaw(a, b);
         }
     }

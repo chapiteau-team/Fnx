@@ -3,29 +3,26 @@ using Fnx.Laws;
 
 namespace Fnx.Core.Tests.TypeClasses.Laws
 {
-    public class ApplicativeLawsTests<TApplicative, TF, TEqK, TA, TB, TC>
-        : ApplyLawsTests<TApplicative, TF, TEqK, TA, TB, TC>
-        where TApplicative : struct, IApplicative<TF>
-        where TEqK : struct, IEqK<TF>
+    public class ApplicativeLawsTests<TF, TA, TB, TC> : ApplyLawsTests<TF, TA, TB, TC>
     {
-        public ApplicativeLawsTests()
+        public ApplicativeLawsTests(IApplicative<TF> applicative, IEqK<TF> eqK) : base(applicative, eqK)
         {
+            var applicativeLaws = new ApplicativeLaws<TF>(applicative);
+
             Add("Applicative Identity", args =>
-                ApplicativeLaws<TApplicative, TF>.ApplicativeIdentity(args.LiftedA).Holds<TF, TA, TEqK>());
+                applicativeLaws.ApplicativeIdentity(args.LiftedA).Holds(eqK));
 
             Add("Applicative Homomorphism", args =>
-                ApplicativeLaws<TApplicative, TF>.ApplicativeHomomorphism(args.A, args.FuncAtoB).Holds<TF, TB, TEqK>());
+                applicativeLaws.ApplicativeHomomorphism(args.A, args.FuncAtoB).Holds(eqK));
 
             Add("Applicative Interchange", args =>
-                ApplicativeLaws<TApplicative, TF>.ApplicativeInterchange(args.A, args.LiftedFuncAtoB)
-                    .Holds<TF, TB, TEqK>());
+                applicativeLaws.ApplicativeInterchange(args.A, args.LiftedFuncAtoB).Holds(eqK));
 
             Add("Applicative Map", args =>
-                ApplicativeLaws<TApplicative, TF>.ApplicativeMap(args.LiftedA, args.FuncAtoB).Holds<TF, TB, TEqK>());
+                applicativeLaws.ApplicativeMap(args.LiftedA, args.FuncAtoB).Holds(eqK));
 
             Add("Ap Product Consistent", args =>
-                ApplicativeLaws<TApplicative, TF>.ApProductConsistent(args.LiftedA, args.LiftedFuncAtoB)
-                    .Holds<TF, TB, TEqK>());
+                applicativeLaws.ApProductConsistent(args.LiftedA, args.LiftedFuncAtoB).Holds(eqK));
         }
     }
 }

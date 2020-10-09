@@ -5,9 +5,12 @@ using Fnx.Core.Types;
 
 namespace Fnx.Core.TypeClasses.Instances
 {
-    public struct ListEq<T, TEq> : IEq<List<T>>
-        where TEq : struct, IEq<T>
+    public class ListEq<T> : IEq<List<T>>
     {
+        private readonly IEq<T> _eq;
+
+        public ListEq(IEq<T> eq) => _eq = eq;
+
         public bool Eqv(List<T> a, List<T> b)
         {
             if (a.Count != b.Count)
@@ -15,11 +18,10 @@ namespace Fnx.Core.TypeClasses.Instances
                 return false;
             }
 
-            var eq = default(TEq);
             var count = a.Count;
             for (var i = 0; i < count; i++)
             {
-                if (!eq.Eqv(a[i], b[i]))
+                if (_eq.NEqv(a[i], b[i]))
                 {
                     return false;
                 }
@@ -29,25 +31,25 @@ namespace Fnx.Core.TypeClasses.Instances
         }
     }
 
-    public struct ListEqK : IEqK<ListF>
+    public class ListEqK : IEqK<ListF>
     {
-        public bool EqK<T, TEq>(IKind<ListF, T> x, IKind<ListF, T> y) where TEq : struct, IEq<T> =>
-            default(ListEq<T, TEq>).Eqv(x.Fix(), y.Fix());
+        public bool EqK<T>(IKind<ListF, T> x, IKind<ListF, T> y, IEq<T> eq) =>
+            ListK.Eq(eq).Eqv(x.Fix(), y.Fix());
     }
 
-    public struct ListInvariant : IInvariant<ListF>
+    public class ListInvariant : IInvariant<ListF>
     {
         public IKind<ListF, TB> XMap<TA, TB>(IKind<ListF, TA> fa, Func<TA, TB> f, Func<TB, TA> g) =>
             fa.Fix().Map(f).K();
     }
 
-    public struct ListFunctor : IFunctor<ListF>
+    public class ListFunctor : IFunctor<ListF>
     {
         public IKind<ListF, TB> Map<TA, TB>(IKind<ListF, TA> fa, Func<TA, TB> f) =>
             fa.Fix().Map(f).K();
     }
 
-    public struct ListApply : IApply<ListF>
+    public class ListApply : IApply<ListF>
     {
         public IKind<ListF, TB> Map<TA, TB>(IKind<ListF, TA> fa, Func<TA, TB> f) =>
             fa.Fix().Map(f).K();
@@ -59,7 +61,7 @@ namespace Fnx.Core.TypeClasses.Instances
         }
     }
 
-    public struct ListApplicative : IApplicative<ListF>
+    public class ListApplicative : IApplicative<ListF>
     {
         public IKind<ListF, TB> Map<TA, TB>(IKind<ListF, TA> fa, Func<TA, TB> f) =>
             fa.Fix().Map(f).K();
@@ -74,12 +76,35 @@ namespace Fnx.Core.TypeClasses.Instances
             new List<T> {value}.K();
     }
 
-    public struct ListFlatMap : IFlatMap<ListF>
+    public class ListFlatMap : IFlatMap<ListF>
     {
         public IKind<ListF, TB> Map<TA, TB>(IKind<ListF, TA> fa, Func<TA, TB> f) =>
             fa.Fix().Map(f).K();
 
         public IKind<ListF, TB> FlatMap<TA, TB>(IKind<ListF, TA> fa, Func<TA, IKind<ListF, TB>> f) =>
             fa.Fix().FlatMap(x => f(x).Fix()).K();
+    }
+
+    public static class ListK
+    {
+        public static IEq<List<T>> Eq<T>(IEq<T> eq) => new ListEq<T>(eq);
+
+        private static readonly IEqK<ListF> EqkSingleton = new ListEqK();
+        public static IEqK<ListF> EqK() => EqkSingleton;
+
+        private static readonly IInvariant<ListF> InvariantSingleton = new ListInvariant();
+        public static IInvariant<ListF> Invariant() => InvariantSingleton;
+
+        private static readonly IFunctor<ListF> FunctorSingleton = new ListFunctor();
+        public static IFunctor<ListF> Functor() => FunctorSingleton;
+
+        private static readonly IApply<ListF> ApplySingleton = new ListApply();
+        public static IApply<ListF> Apply() => ApplySingleton;
+
+        private static readonly IApplicative<ListF> ApplicativeSingleton = new ListApplicative();
+        public static IApplicative<ListF> Applicative() => ApplicativeSingleton;
+
+        private static readonly IFlatMap<ListF> FlatMapSingleton = new ListFlatMap();
+        public static IFlatMap<ListF> FlatMap() => FlatMapSingleton;
     }
 }
