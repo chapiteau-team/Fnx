@@ -5,7 +5,7 @@ namespace Fnx.Core.Tests.TypeClasses.Laws
 {
     public class Law<T>
     {
-        private string Name { get; }
+        public string Name { get; }
 
         public Func<T, bool> TestLaw { get; }
 

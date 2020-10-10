@@ -83,6 +83,21 @@ namespace Fnx.Core.TypeClasses.Instances
 
         public IKind<ListF, TB> FlatMap<TA, TB>(IKind<ListF, TA> fa, Func<TA, IKind<ListF, TB>> f) =>
             fa.Fix().FlatMap(x => f(x).Fix()).K();
+
+        public IKind<ListF, T> Pure<T>(T value) =>
+            new List<T> {value}.K();
+    }
+
+    public class ListMonad : IMonad<ListF>
+    {
+        public IKind<ListF, TB> Map<TA, TB>(IKind<ListF, TA> fa, Func<TA, TB> f) =>
+            fa.Fix().Map(f).K();
+
+        public IKind<ListF, TB> FlatMap<TA, TB>(IKind<ListF, TA> fa, Func<TA, IKind<ListF, TB>> f) =>
+            fa.Fix().FlatMap(x => f(x).Fix()).K();
+
+        public IKind<ListF, T> Pure<T>(T value) =>
+            new List<T> {value}.K();
     }
 
     public static class ListK
@@ -106,5 +121,8 @@ namespace Fnx.Core.TypeClasses.Instances
 
         private static readonly IFlatMap<ListF> FlatMapSingleton = new ListFlatMap();
         public static IFlatMap<ListF> FlatMap() => FlatMapSingleton;
+
+        private static readonly IMonad<ListF> MonadSingleton = new ListMonad();
+        public static IMonad<ListF> Monad() => MonadSingleton;
     }
 }

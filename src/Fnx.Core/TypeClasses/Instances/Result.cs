@@ -84,6 +84,19 @@ namespace Fnx.Core.TypeClasses.Instances
             fa.Fix().FlatMap(x => f(x).Fix());
     }
 
+    public class ResultMonad<TError> : IMonad<ResultOkF<TError>>
+    {
+        public IKind<ResultOkF<TError>, TB> Map<TA, TB>(IKind<ResultOkF<TError>, TA> fa, Func<TA, TB> f) =>
+            fa.Fix().Map(f);
+
+        public IKind<ResultOkF<TError>, TB> FlatMap<TA, TB>(
+            IKind<ResultOkF<TError>, TA> fa, Func<TA, IKind<ResultOkF<TError>, TB>> f) =>
+            fa.Fix().FlatMap(x => f(x).Fix());
+
+        public IKind<ResultOkF<TError>, T> Pure<T>(T value) =>
+            new Ok<T, TError>(value);
+    }
+
     public static class ResultK
     {
         public static IEq<Result<TOk, TError>> Eq<TOk, TError>(IEq<TOk> eqOk, IEq<TError> eqError) =>
@@ -111,5 +124,8 @@ namespace Fnx.Core.TypeClasses.Instances
 
         private static readonly IFlatMap<ResultOkF<TError>> FlatMapSingleton = new ResultFlatMap<TError>();
         public static IFlatMap<ResultOkF<TError>> FlatMap() => FlatMapSingleton;
+
+        private static readonly IMonad<ResultOkF<TError>> MonadSingleton = new ResultMonad<TError>();
+        public static IMonad<ResultOkF<TError>> Monad() => MonadSingleton;
     }
 }
