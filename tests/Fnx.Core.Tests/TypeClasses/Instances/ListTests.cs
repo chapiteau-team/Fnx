@@ -11,7 +11,7 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
     public class ListTests
     {
         public static IEnumerable<object[]> EqLaws() =>
-            new EqLawsTests<List<string>>(ListK.Eq(Default<string>.Eq())).Wrap();
+            new EqLawsTests<List<string>>(ListK.Eq(StringK.Eq())).Wrap();
 
         [Theory]
         [MemberData(nameof(EqLaws))]

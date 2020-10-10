@@ -12,7 +12,7 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
     public class OptionTests
     {
         public static IEnumerable<object[]> EqLaws() =>
-            new EqLawsTests<Option<string>>(OptionK.Eq(Default<string>.Eq())).Wrap();
+            new EqLawsTests<Option<string>>(OptionK.Eq(StringK.Eq())).Wrap();
 
         [Theory]
         [MemberData(nameof(EqLaws))]

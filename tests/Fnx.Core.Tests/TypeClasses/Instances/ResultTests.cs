@@ -12,7 +12,7 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
     public class ResultTests
     {
         public static IEnumerable<object[]> EqLaws() =>
-            new EqLawsTests<Result<int, string>>(ResultK.Eq(Default<int>.Eq(), Default<string>.Eq())).Wrap();
+            new EqLawsTests<Result<int, string>>(ResultK.Eq(Int32K.Eq(), StringK.Eq())).Wrap();
 
         [Theory]
         [MemberData(nameof(EqLaws))]
@@ -24,7 +24,7 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
 
         public static IEnumerable<object[]> InvariantLaws() =>
             new InvariantLawsTests<ResultOkF<bool>, string, int, long>(
-                ResultK<bool>.Invariant(), ResultK.EqK(Default<bool>.Eq())).Wrap();
+                ResultK<bool>.Invariant(), ResultK.EqK(BooleanK.Eq())).Wrap();
 
         [Theory]
         [MemberData(nameof(InvariantLaws))]
@@ -48,7 +48,7 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
 
         public static IEnumerable<object[]> FunctorLaws() =>
             new FunctorLawsTests<ResultOkF<bool>, string, int, long>(
-                ResultK<bool>.Functor(), ResultK.EqK(Default<bool>.Eq())).Wrap();
+                ResultK<bool>.Functor(), ResultK.EqK(BooleanK.Eq())).Wrap();
 
         [Theory]
         [MemberData(nameof(FunctorLaws))]
@@ -72,7 +72,7 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
 
         public static IEnumerable<object[]> ApplyLaws() =>
             new ApplyLawsTests<ResultOkF<bool>, string, int, long>(
-                ResultK<bool>.Apply(), ResultK.EqK(Default<bool>.Eq())).Wrap();
+                ResultK<bool>.Apply(), ResultK.EqK(BooleanK.Eq())).Wrap();
 
         [Theory]
         [MemberData(nameof(ApplyLaws))]
@@ -102,7 +102,7 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
 
         public static IEnumerable<object[]> ApplicativeLaws() =>
             new ApplicativeLawsTests<ResultOkF<bool>, string, int, long>(
-                ResultK<bool>.Applicative(), ResultK.EqK(Default<bool>.Eq())).Wrap();
+                ResultK<bool>.Applicative(), ResultK.EqK(BooleanK.Eq())).Wrap();
 
         [Theory]
         [MemberData(nameof(ApplicativeLaws))]
@@ -132,7 +132,7 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
 
         public static IEnumerable<object[]> FlatMapLaws() =>
             new FlatMapLawsTests<ResultOkF<bool>, string, int, long>(
-                ResultK<bool>.FlatMap(), ResultK.EqK(Default<bool>.Eq())).Wrap();
+                ResultK<bool>.FlatMap(), ResultK.EqK(BooleanK.Eq())).Wrap();
 
         [Theory]
         [MemberData(nameof(FlatMapLaws))]
@@ -166,7 +166,7 @@ namespace Fnx.Core.Tests.TypeClasses.Instances
 
         public static IEnumerable<object[]> MonadLaws() =>
             new MonadLawsTests<ResultOkF<bool>, string, int, long>(
-                ResultK<bool>.Monad(), ResultK.EqK(Default<bool>.Eq())).Wrap();
+                ResultK<bool>.Monad(), ResultK.EqK(BooleanK.Eq())).Wrap();
 
         [Theory]
         [MemberData(nameof(MonadLaws))]
