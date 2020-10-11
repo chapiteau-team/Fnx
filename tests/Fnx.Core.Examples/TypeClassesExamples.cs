@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Text;
 using Fnx.Core.DataTypes;
 using Fnx.Core.Examples.TypeClasses;
@@ -7,7 +6,8 @@ using Fnx.Core.TypeClasses.Instances;
 using Shouldly;
 using Xunit;
 using static Fnx.Core.Prelude;
-using OptionK = Fnx.Core.Examples.TypeClasses.Instances.OptionK;
+using ResultK = Fnx.Core.Examples.TypeClasses.Instances.ResultK;
+using StringK = Fnx.Core.Examples.TypeClasses.Instances.StringK;
 
 namespace Fnx.Core.Examples
 {
@@ -18,25 +18,24 @@ namespace Fnx.Core.Examples
         {
             var userId = 1;
 
-            ResultK<Error>.Apply().Map3(
+            OptionK.Applicative().Map3(
                     UserRepository.GetUserDetails(userId),
-                    OrderRepository.GetOrders(userId),
-                    ShipmentRepository.GetShipments(userId),
-                    (UserDetails user, List<Order> orders, List<Shipment> shipments) =>
-                        ReportManager.MakeReport(user, orders, shipments))
+                    OrderRepository.GetOrders(),
+                    ShipmentRepository.GetShipments(),
+                    ReportManager.MakeReport)
                 .Fix()
-                .IsOk
+                .IsSome
                 .ShouldBe(true);
 
-            
+
             // The same with monadic bind
             var report =
                 from user in UserRepository.GetUserDetails(userId)
-                from orders in OrderRepository.GetOrders(userId)
-                from shipments in ShipmentRepository.GetShipments(userId)
+                from orders in OrderRepository.GetOrders()
+                from shipments in ShipmentRepository.GetShipments()
                 select ReportManager.MakeReport(user, orders, shipments);
 
-            report.IsOk.ShouldBe(true);
+            report.IsSome.ShouldBe(true);
         }
 
         [Fact]
@@ -62,10 +61,7 @@ namespace Fnx.Core.Examples
             private readonly IDisplay<T> _display;
             internal StringBuilder StdOut = new StringBuilder();
 
-            public Writer(IDisplay<T> display)
-            {
-                _display = display;
-            }
+            public Writer(IDisplay<T> display) => _display = display;
 
             public string Format(T value) => _display.Output(value);
 
@@ -81,14 +77,14 @@ namespace Fnx.Core.Examples
             writer.StdOut.ToString()
                 .ShouldBe("Location where X=15 and Y=20\n");
 
-            var optionDisplay = OptionK.Display(LocationK.Display());
-            new Writer<Option<Location>>(optionDisplay)
-                .Format(Some(myLocation))
+            var resultDisplay = ResultK.Display(LocationK.Display(), StringK.Display());
+            new Writer<Result<Location, string>>(resultDisplay)
+                .Format(Ok(myLocation))
                 .ShouldBe("Got a value of Location where X=15 and Y=20");
 
-            new Writer<Option<Location>>(optionDisplay)
-                .Format(None)
-                .ShouldBe("Nothing, sorry");
+            new Writer<Result<Location, string>>(resultDisplay)
+                .Format(Error("error"))
+                .ShouldBe("Sorry, error");
         }
     }
 }

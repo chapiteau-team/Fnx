@@ -16,29 +16,23 @@ namespace Fnx.Core.Examples
     {
     }
 
-    enum Error
-    {
-        NotFound,
-        NoAccess,
-    }
-
     struct Report
     {
     }
 
     static class UserRepository
     {
-        public static Result<UserDetails, Error> GetUserDetails(int userId) => Ok(new UserDetails());
+        public static Option<UserDetails> GetUserDetails(int userId) => Some(new UserDetails());
     }
 
     static class OrderRepository
     {
-        public static Result<List<Order>, Error> GetOrders(int userId) => Ok(new List<Order>());
+        public static Option<List<Order>> GetOrders() => Some(new List<Order>());
     }
 
     static class ShipmentRepository
     {
-        public static Result<List<Shipment>, Error> GetShipments(int userId) => Ok(new List<Shipment>());
+        public static Option<List<Shipment>> GetShipments() => Some(new List<Shipment>());
     }
 
     static class ReportManager
