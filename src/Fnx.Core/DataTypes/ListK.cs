@@ -18,7 +18,7 @@ namespace Fnx.Core.DataTypes
         }
     }
 
-    public static class List
+    public static class ListEx
     {
         public static List<TResult> Map<T, TResult>(this List<T> self, Func<T, TResult> map)
         {

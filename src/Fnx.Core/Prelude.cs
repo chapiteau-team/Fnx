@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Fnx.Core.DataTypes;
 using Fnx.Core.Types;
 
@@ -10,7 +11,7 @@ namespace Fnx.Core
         /// Instance of the Nothing class.
         /// Used in Partial Application to o indicate that the parameter is bypassed. 
         /// </summary>
-        public static Nothing __ => new Nothing();
+        public static Nothing __ { get; } = new Nothing();
 
         /// <summary>
         /// Instantiates Some representing an existing value of type <typeparamref name="T"/>.
@@ -26,7 +27,7 @@ namespace Fnx.Core
         public static None<Nothing> None => new None<Nothing>();
 
         /// <summary>
-        /// Instantiates Ok with the value of <typeparamref name="TOk"/>
+        /// Instantiates Ok with the value of <typeparamref name="TOk"/>.
         /// </summary>
         /// <param name="ok"></param>
         /// <typeparam name="TOk"></typeparam>
@@ -34,7 +35,7 @@ namespace Fnx.Core
         public static Ok<TOk, Nothing> Ok<TOk>(TOk ok) => new Ok<TOk, Nothing>(ok);
 
         /// <summary>
-        /// Instantiates Result with state Ok with the value of <typeparamref name="TOk"/>
+        /// Instantiates Result with state Ok with the value of <typeparamref name="TOk"/>.
         /// </summary>
         /// <param name="ok"></param>
         /// <typeparam name="TOk"></typeparam>
@@ -43,7 +44,7 @@ namespace Fnx.Core
         public static Ok<TOk, TError> Ok<TOk, TError>(TOk ok) => new Ok<TOk, TError>(ok);
 
         /// <summary>
-        /// Instantiates Error with the value of <typeparamref name="TError"/>
+        /// Instantiates Error with the value of <typeparamref name="TError"/>.
         /// </summary>
         /// <param name="error"></param>
         /// <typeparam name="TError"></typeparam>
@@ -51,13 +52,43 @@ namespace Fnx.Core
         public static Error<Nothing, TError> Error<TError>(TError error) => new Error<Nothing, TError>(error);
 
         /// <summary>
-        /// Instantiates Result with state Error with the value of <typeparamref name="TError"/>
+        /// Instantiates Result with state Error with the value of <typeparamref name="TError"/>.
         /// </summary>
         /// <param name="error"></param>
         /// <typeparam name="TOk"></typeparam>
         /// <typeparam name="TError"></typeparam>
         /// <returns></returns>
         public static Error<TOk, TError> Error<TOk, TError>(TError error) => new Error<TOk, TError>(error);
+
+        /// <summary>
+        /// Returns a new <see cref="List{T}"/> of given elements.
+        /// </summary>
+        /// <param name="items"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static List<T> ListOf<T>(params T[] items) => new List<T>(items);
+
+        /// <summary>
+        /// Returns an empty <see cref="List{T}"/>>.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static List<T> ListOf<T>() => new List<T>();
+
+        /// <summary>
+        /// Returns a new array of given elements.
+        /// </summary>
+        /// <param name="items"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static T[] ArrayOf<T>(params T[] items) => items;
+
+        /// <summary>
+        /// Returns an empty array.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static T[] ArrayOf<T>() => new T[] { };
 
         // @formatter:off
         public static Func<TResult> Def<TResult>(Func<TResult> f) => f;
