@@ -127,6 +127,16 @@ namespace Fnx.Core.Tests.DataTypes
         }
 
         [Fact]
+        public void TestOrElse()
+        {
+            Error<int, bool>(false).OrElse(Ok(1)).ShouldBe(Ok(1));
+            Error<int, bool>(false).OrElse(() => Ok(1)).ShouldBe(Ok(1));
+            Error<int, bool>(false).OrElse(() => Error(true)).ShouldBe(Error(true));
+            Ok<int, bool>(1).OrElse(Ok(2)).ShouldBe(Ok(1));
+            Ok<int, bool>(1).OrElse(() => Error(false)).ShouldBe(Ok(1));
+        }
+
+        [Fact]
         public void TestMatch()
         {
             Ok("ok").Match(ok => ok.ShouldBe("ok"), error => error.ShouldNotBe(new Nothing()));

@@ -73,6 +73,21 @@ namespace Fnx.Core.DataTypes
         public abstract TError GetError();
 
         /// <summary>
+        /// Returns this if it is <see cref="Ok{TOk,TError}"/>, otherwise returns <paramref name="alternative"/>.
+        /// </summary>
+        /// <param name="alternative"></param>
+        /// <returns></returns>
+        public abstract Result<TOk, TError> OrElse(Result<TOk, TError> alternative);
+
+        /// <summary>
+        /// Returns this if it is <see cref="Ok{TOk,TError}"/>,
+        /// otherwise returns the result of evaluating <paramref name="alternative"/>.
+        /// </summary>
+        /// <param name="alternative"></param>
+        /// <returns></returns>
+        public abstract Result<TOk, TError> OrElse(Func<Result<TOk, TError>> alternative);
+
+        /// <summary>
         /// Applies a function on the Ok value.
         /// Returns an Ok containing the result of applying <paramref name="map"/> to this Ok value
         /// if this Result is Ok. Otherwise, return Error.
@@ -266,6 +281,12 @@ namespace Fnx.Core.DataTypes
         public override TError GetError() => throw new InvalidOperationException(ExceptionsMessages.ResultIsOk);
 
         /// <inheritdoc />
+        public override Result<TOk, TError> OrElse(Result<TOk, TError> alternative) => this;
+
+        /// <inheritdoc />
+        public override Result<TOk, TError> OrElse(Func<Result<TOk, TError>> alternative) => this;
+
+        /// <inheritdoc />
         public override Result<T, TError> Map<T>(Func<TOk, T> map)
         {
             _ = map ?? throw new ArgumentNullException(nameof(map));
@@ -403,6 +424,13 @@ namespace Fnx.Core.DataTypes
 
         /// <inheritdoc />
         public override TError GetError() => _error;
+
+        /// <inheritdoc />
+        public override Result<TOk, TError> OrElse(Result<TOk, TError> alternative) => alternative;
+
+        /// <inheritdoc />
+        public override Result<TOk, TError> OrElse(Func<Result<TOk, TError>> alternative) =>
+            alternative is null ? throw new ArgumentNullException(nameof(alternative)) : alternative();
 
         /// <inheritdoc />
         public override Result<T, TError> Map<T>(Func<TOk, T> map) => new Error<T, TError>(_error);
