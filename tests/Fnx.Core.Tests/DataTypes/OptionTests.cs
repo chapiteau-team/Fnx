@@ -30,6 +30,13 @@ namespace Fnx.Core.Tests.DataTypes
             GetNone("none").GetOrDefault().ShouldBe(null);
 
         [Fact]
+        public void NoneOrElseReturnsAlternative()
+        {
+            Option<int>.None.OrElse(Some(1)).ShouldBe(Some(1));
+            Option<int>.None.OrElse(() => Some(1)).ShouldBe(Some(1));
+        }
+
+        [Fact]
         public void SomeToStringReturnsSomeWithValue() =>
             Option<string>.Some(null).ToString().ShouldBe("Some()");
 
@@ -53,6 +60,15 @@ namespace Fnx.Core.Tests.DataTypes
         public void SomeGetOrDefaultReturnsValue()
         {
             Some("ok").GetOrDefault().ShouldBe("ok");
+        }
+
+
+        [Fact]
+        public void SomeOrElseReturnsSome()
+        {
+            Some(1).OrElse(None).ShouldBe(Some(1));
+            Some(1).OrElse(Some(2)).ShouldBe(Some(1));
+            Some(1).OrElse(() => Some(2)).ShouldBe(Some(1));
         }
 
         [Fact]

@@ -23,12 +23,14 @@ namespace Fnx.Core.DataTypes
         }
 
         /// <summary>
-        /// Returns true if the option is Some, false otherwise.
+        /// Returns <see langword="true"/> if the <see cref="Option{T}"/> is <see cref="Some{T}"/>,
+        /// <see langword="false"/> otherwise.
         /// </summary>
         public abstract bool IsSome { get; }
 
         /// <summary>
-        /// Returns true if the option is None, false otherwise.
+        /// Returns <see langword="true"/> if the <see cref="Option{T}"/> is <see cref="None{T}"/>,
+        /// <see langword="false"/> otherwise.
         /// </summary>
         public bool IsNone => !IsSome;
 
@@ -59,6 +61,21 @@ namespace Fnx.Core.DataTypes
         /// <returns></returns>
         [return: MaybeNull]
         public T GetOrDefault() => GetOrElse(default(T));
+
+        /// <summary>
+        /// Returns this if it is <see cref="Some{T}"/>, otherwise returns <paramref name="alternative"/>.
+        /// </summary>
+        /// <param name="alternative"></param>
+        /// <returns></returns>
+        public abstract Option<T> OrElse(Option<T> alternative);
+
+        /// <summary>
+        /// Returns this if it is <see cref="Some{T}"/>,
+        /// otherwise returns the result of evaluating <paramref name="alternative"/>.
+        /// </summary>
+        /// <param name="alternative"></param>
+        /// <returns></returns>
+        public abstract Option<T> OrElse(Func<Option<T>> alternative);
 
         /// <summary>
         /// Applies a function on the optional value.
@@ -190,7 +207,6 @@ namespace Fnx.Core.DataTypes
         /// <param name="value"></param>
         public Some(TSome value) => _value = value;
 
-
         /// <inheritdoc />
         public override bool IsSome => true;
 
@@ -202,6 +218,12 @@ namespace Fnx.Core.DataTypes
 
         /// <inheritdoc />
         public override TSome GetOrElse(Func<TSome> or) => _value;
+
+        /// <inheritdoc />
+        public override Option<TSome> OrElse(Option<TSome> alternative) => this;
+
+        /// <inheritdoc />
+        public override Option<TSome> OrElse(Func<Option<TSome>> alternative) => this;
 
         /// <inheritdoc />
         public override Option<TResult> Map<TResult>(Func<TSome, TResult> map) =>
@@ -272,7 +294,6 @@ namespace Fnx.Core.DataTypes
     public class None<TSome> : Option<TSome>
     {
         /// <inheritdoc />
-
         public override bool IsSome => false;
 
         /// <inheritdoc />
@@ -285,6 +306,13 @@ namespace Fnx.Core.DataTypes
         /// <inheritdoc />
         public override TSome GetOrElse(Func<TSome> or) =>
             or is null ? throw new ArgumentNullException(nameof(or)) : or();
+
+        /// <inheritdoc />
+        public override Option<TSome> OrElse(Option<TSome> alternative) => alternative;
+
+        /// <inheritdoc />
+        public override Option<TSome> OrElse(Func<Option<TSome>> alternative) =>
+            alternative is null ? throw new ArgumentNullException(nameof(alternative)) : alternative();
 
         /// <inheritdoc />
         public override Option<TResult> Map<TResult>(Func<TSome, TResult> map) =>
