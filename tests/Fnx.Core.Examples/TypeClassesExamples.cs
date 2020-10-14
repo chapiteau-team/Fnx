@@ -53,7 +53,7 @@ namespace Fnx.Core.Examples
                 .ShouldBe("Branch(Leaf(True), Leaf(True))");
 
             TreeK.Functor().Void(tree).Fix().ToString()
-                .ShouldBe("Branch(Leaf(Nothing), Leaf(Nothing))");
+                .ShouldBe("Branch(Leaf(Unit), Leaf(Unit))");
         }
 
         public class Writer<T>

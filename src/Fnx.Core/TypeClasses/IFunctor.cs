@@ -50,8 +50,8 @@ namespace Fnx.Core.TypeClasses
         /// <param name="fa"></param>
         /// <typeparam name="TA"></typeparam>
         /// <returns></returns>
-        IKind<TF, Nothing> Void<TA>(IKind<TF, TA> fa) =>
-            Map(fa, _ => new Nothing());
+        IKind<TF, Unit> Void<TA>(IKind<TF, TA> fa) =>
+            Map(fa, _ => new Unit());
 
         /// <summary>
         /// Tuple the values in <paramref name="fa"/> with the result of applying a function with the value.

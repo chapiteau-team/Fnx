@@ -39,11 +39,11 @@ namespace Fnx.Laws
             return IsEq.EqualUnderLaw(lg(lf(fa)), lgf(fa));
         }
 
-        public IsEq<IKind<TF, Nothing>> VoidIdentity<TA>(IKind<TF, TA> fa) =>
-            IsEq.EqualUnderLaw(_functor.Void(fa), _functor.Map(fa, _ => new Nothing()));
+        public IsEq<IKind<TF, Unit>> VoidIdentity<TA>(IKind<TF, TA> fa) =>
+            IsEq.EqualUnderLaw(_functor.Void(fa), _functor.Map(fa, _ => new Unit()));
 
-        public IsEq<IKind<TF, Nothing>> VoidComposition<TA>(IKind<TF, TA> fa) =>
-            IsEq.EqualUnderLaw(_functor.Void(_functor.Void(fa)), _functor.Map(fa, _ => new Nothing()));
+        public IsEq<IKind<TF, Unit>> VoidComposition<TA>(IKind<TF, TA> fa) =>
+            IsEq.EqualUnderLaw(_functor.Void(_functor.Void(fa)), _functor.Map(fa, _ => new Unit()));
 
         public IsEq<IKind<TF, (TA, TB)>> FProductIdentity<TA, TB>(IKind<TF, TA> fa, TB b) =>
             IsEq.EqualUnderLaw(_functor.FProduct(fa, _ => b), _functor.Map(fa, a => (a, b)));
