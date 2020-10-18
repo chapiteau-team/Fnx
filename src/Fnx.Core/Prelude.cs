@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Fnx.Core.DataTypes;
 using Fnx.Core.Types;
 
@@ -59,6 +60,44 @@ namespace Fnx.Core
         /// <typeparam name="TError"></typeparam>
         /// <returns></returns>
         public static Error<TOk, TError> Error<TOk, TError>(TError error) => new Error<TOk, TError>(error);
+
+        /// <summary>
+        /// Constructs a Try using the function <paramref name="f"/>.
+        /// This method will ensure any exception is caught and a Failure object is returned.
+        /// </summary>
+        /// <param name="f"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static Try<T> Try<T>(Func<T> f)
+        {
+            try
+            {
+                return f();
+            }
+            catch (Exception e)
+            {
+                return e;
+            }
+        }
+
+        /// <summary>
+        /// Constructs a Try using the function <paramref name="f"/> returning Task of <typeparamref name="T"/>.
+        /// This method will ensure any non-fatal exception is caught and a Failure object is returned.
+        /// </summary>
+        /// <param name="f"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static async Task<Try<T>> Try<T>(Func<Task<T>> f)
+        {
+            try
+            {
+                return await f().ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                return e;
+            }
+        }
 
         /// <summary>
         /// Returns a new <see cref="List{T}"/> of given elements.

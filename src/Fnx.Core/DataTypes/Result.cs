@@ -16,7 +16,7 @@ namespace Fnx.Core.DataTypes
     }
 
     /// <summary>
-    /// The Result type represents Ok value of <typeparamref name="TOk"/>  or Error value of <typeparamref name="TError"/>.
+    /// The Result type represents Ok value of <typeparamref name="TOk"/> or Error value of <typeparamref name="TError"/>.
     /// An instance of Result is either Ok or Error.
     /// </summary>
     /// <typeparam name="TOk"></typeparam>
@@ -278,7 +278,8 @@ namespace Fnx.Core.DataTypes
         public override TOk GetOrElse(Func<TOk> or) => _ok;
 
         /// <inheritdoc />
-        public override TError GetError() => throw new InvalidOperationException(ExceptionsMessages.ResultIsOk);
+        public override TError GetError() =>
+            throw new InvalidOperationException(ExceptionsMessages.ResultIsOk);
 
         /// <inheritdoc />
         public override Result<TOk, TError> OrElse(Result<TOk, TError> alternative) => this;
