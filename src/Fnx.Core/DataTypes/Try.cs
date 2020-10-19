@@ -570,7 +570,7 @@ namespace Fnx.Core.DataTypes
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         public static Success<T> Success<T>(T value) => new Success<T>(value);
-        
+
         /// <summary>
         /// Constructs a <see cref="Failure{T}"/> using the <paramref name="exception"/>.
         /// </summary>
@@ -593,5 +593,9 @@ namespace Fnx.Core.DataTypes
         }
 
         public static Try<T> Where<T>(this Try<T> self, Func<T, bool> condition) => self.Filter(condition);
+
+        public static Try<T> Fix<T>(this IKind<TryF, T> self) => (Try<T>) self;
+
+        public static IKind<TryF, T> K<T>(this Try<T> self) => self;
     }
 }
